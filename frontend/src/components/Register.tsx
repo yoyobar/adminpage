@@ -11,14 +11,23 @@ function Register({ registerModalClose }: RegisterPropsType) {
   const [password1, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
 
-  //? MYSQL DB
-  async function userCreate(email: string, pw1: string, pw2: string) {
+  //? POST 계정생성
+  const userCreate = async (email: string, pw: string) => {
     try {
-      await axios.post("http://localhost:3001/api", { email, pw1, pw2 });
+      const post = await axios.post("http://localhost:3001/api", { email, pw });
+      console.log(post.data);
+      if (post.data) {
+        return alert("이미 존재합니다.");
+      } else {
+        setEmail("");
+        setPassword("");
+        setPassword2("");
+        registerModalClose();
+      }
     } catch (err) {
       console.error("Error", err);
     }
-  }
+  };
 
   //? FORM 데이터 처리
   const emailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,8 +53,9 @@ function Register({ registerModalClose }: RegisterPropsType) {
     if (pw1 !== pw2) {
       setPasswordVerify(true);
       return false;
+    } else {
+      return true;
     }
-    return true;
   };
 
   //? FORM 데이터 DB등록
@@ -53,9 +63,7 @@ function Register({ registerModalClose }: RegisterPropsType) {
     e.preventDefault();
 
     if (formVerify(email, password1, password2)) {
-      userCreate(email, password1, password2);
-    } else {
-      return;
+      userCreate(email, password1);
     }
   };
 
@@ -66,7 +74,7 @@ function Register({ registerModalClose }: RegisterPropsType) {
           <Button type="button" onClick={registerModalClose} text=">" color="gray" />
         </div>
         <div className="w-10/12 flex-col flex justify-center items-center">
-          <div className="text-white text-2xl mb-8 font-bold">Sign in Your Account</div>
+          <div className="text-white text-center text-2xl mb-8 font-bold">Sign in Your Account</div>
           <div className="flex flex-col w-full gap-2 justify-between items-start ">
             <div className="font-mono flex gap-4 text-white flex-grow">
               <div>Email</div>
