@@ -22,9 +22,9 @@ function Login() {
           <div className="mb-4"></div>
           <Input require={true} type="password" text="Password" />
           <div className="mb-8"></div>
-          <Button text="Login" type="indigo" />
+          <Button type="submit" text="Login" color="indigo" />
           <div className="mb-4"></div>
-          <Button text="Register" type="green" onClick={registerModal} />
+          <Button type="button" text="Register" color="green" onClick={registerModal} />
         </form>
       </div>
       <div>{toggle ? <Register registerModalClose={registerModalClose} /> : null}</div>
