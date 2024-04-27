@@ -1,24 +1,35 @@
+import { useState } from "react";
 import Button from "./ui/Button";
 import Input from "./ui/Input";
+import Register from "./Register";
 
 function Login() {
-  {
-    return (
+  const [toggle, setToggle] = useState(false);
+
+  const registerModal = (): void => {
+    setToggle(true);
+  };
+  const registerModalClose = (): void => {
+    setToggle(false);
+  };
+
+  return (
+    <>
       <div className="flex flex-col justify-center items-center w-full">
         <div className="text-white text-5xl mb-14">ADMIN TEMPLATE</div>
-        <div className="bg-slate-700 flex w-96 flex-col justify-center items-center">
-          <div className="text-white text-2xl mb-8 font-bold">Sign in to your account</div>
-          <Input text="Email address" />
+        <form className="bg-slate-700 flex w-96 flex-col justify-center items-center">
+          <Input require={true} type="email" text="Email address" />
           <div className="mb-4"></div>
-          <Input text="Password" />
+          <Input require={true} type="password" text="Password" />
           <div className="mb-8"></div>
           <Button text="Login" type="indigo" />
           <div className="mb-4"></div>
-          <Button text="Register" type="green" />
-        </div>
+          <Button text="Register" type="green" onClick={registerModal} />
+        </form>
       </div>
-    );
-  }
+      <div>{toggle ? <Register registerModalClose={registerModalClose} /> : null}</div>
+    </>
+  );
 }
 
 export default Login;

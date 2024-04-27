@@ -1,12 +1,6 @@
-import { MouseEventHandler } from "react";
+import { ButtonType } from "../../types";
 
-interface Button {
-  text: string;
-  type: "indigo" | "green" | "red";
-  onClick?: MouseEventHandler<HTMLButtonElement>;
-}
-
-export default function Button({ text, type, onClick }: Button) {
+export default function Button({ text, type, onClick }: ButtonType) {
   let buttonClass: string = "transition delay-100 text-white w-full px-4 py-2 rounded";
   switch (type) {
     case "indigo":
@@ -17,6 +11,9 @@ export default function Button({ text, type, onClick }: Button) {
       break;
     case "red":
       buttonClass += " bg-red-400 hover:bg-red-500";
+      break;
+    case "gray":
+      buttonClass += " bg-gray-400 hover:bg-gray-500";
       break;
   }
 

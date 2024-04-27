@@ -1,10 +1,11 @@
-import Login from "./components/Login";
+import LoginPage from "./Pages/LoginPage.tsx";
+import { Route, Routes } from "react-router-dom";
 
 function App() {
   return (
-    <div className="w-full h-full flex justify-center items-center">
-      <Login />
-    </div>
+    <Routes>
+      <Route path="/" element={<LoginPage />} />
+    </Routes>
   );
 }
 
