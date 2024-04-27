@@ -1,8 +1,8 @@
 import Button from "./ui/Button";
 import Input from "./ui/Input";
 import { RegisterPropsType } from "../types";
-import { PrismaClient } from "@prisma/client/extension";
 import { useState } from "react";
+import axios from "axios";
 
 function Register({ registerModalClose }: RegisterPropsType) {
   const [emailVerify, setEmailVerify] = useState(false);
@@ -11,6 +11,16 @@ function Register({ registerModalClose }: RegisterPropsType) {
   const [password1, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
 
+  //? MYSQL DB
+  async function userCreate(email: string, pw1: string, pw2: string) {
+    try {
+      await axios.post("http://localhost:3001/api", { email, pw1, pw2 });
+    } catch (err) {
+      console.error("Error", err);
+    }
+  }
+
+  //? FORM 데이터 처리
   const emailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
     setEmailVerify(false);
@@ -24,6 +34,7 @@ function Register({ registerModalClose }: RegisterPropsType) {
     setPasswordVerify(false);
   };
 
+  //? FORM 데이터 검증
   const formVerify = (email: string, pw1: string, pw2: string): boolean => {
     const emailCase = email.split("@")[1];
     if (!emailCase.includes(".com")) {
@@ -37,12 +48,12 @@ function Register({ registerModalClose }: RegisterPropsType) {
     return true;
   };
 
+  //? FORM 데이터 DB등록
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (formVerify(email, password1, password2)) {
-      console.log("통과");
-      //? 기능 구현
+      userCreate(email, password1, password2);
     } else {
       return;
     }
