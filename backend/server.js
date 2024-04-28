@@ -16,7 +16,7 @@ app.use(cookieParser());
 app.use(cors());
 
 //? 계정 검증
-app.post('/verify', (req, res) => {
+app.post('/register', (req, res) => {
     const name = req.body.name;
     const email = req.body.email;
     const pw = crypto.createHash('sha512').update(req.body.pw).digest('base64');
@@ -39,6 +39,26 @@ app.post('/verify', (req, res) => {
                 }
             });
         }
+    });
+});
+
+//? 로그인 검증
+app.post('/login', (req, res) => {
+    const email = req.body.email;
+    const pw = crypto.createHash('sha512').update(req.body.password).digest('base64');
+
+    db.query('SELECT id, pw FROM people', (err, result) => {
+        const emailData = result.map((item) => item.id);
+        const pwData = result.map((item) => item.pw);
+
+        for (let i = 0; i < emailData.length; i++) {
+            if (emailData[i].includes(email) && pwData[i].includes(pw)) {
+                //TODO : 데이터 존재함
+                return console.log('true');
+            }
+        }
+        //TODO : 데이터 없음
+        return console.log('no have');
     });
 });
 

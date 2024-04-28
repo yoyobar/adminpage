@@ -17,7 +17,7 @@ function Register({ registerModalClose }: RegisterPropsType) {
   //? POST 계정생성
   const userCreate = async (email: string, pw: string, name: string) => {
     try {
-      const post = await axios.post("http://localhost:3001/verify", { email, pw, name });
+      const post = await axios.post("http://localhost:3001/register", { email, pw, name });
       if (post.data === "email") {
         setEmailError("Email is Already ! Use another email please");
         return setEmailVerify(true);
