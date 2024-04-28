@@ -14,34 +14,21 @@ function Register({ registerModalClose }: RegisterPropsType) {
   const [password2, setPassword2] = useState("");
   const [emailError, setEmailError] = useState("");
 
-  //? USERNAME 존재여부 확인
-  const userNameHave = async (name: string) => {
-    try {
-      const post = await axios.post("http://localhost:3001/userName", { name });
-      if (post.data) {
-        return true;
-      } else {
-        return false;
-      }
-    } catch (err) {
-      console.error("Error", err);
-      return true;
-    }
-  };
-
   //? POST 계정생성
   const userCreate = async (email: string, pw: string, name: string) => {
     try {
       const post = await axios.post("http://localhost:3001/verify", { email, pw, name });
-      if (post.data) {
+      if (post.data === "email") {
         setEmailError("Email is Already ! Use another email please");
         return setEmailVerify(true);
-      } else {
-        setEmail("");
-        setPassword("");
-        setPassword2("");
-        registerModalClose();
       }
+      if (post.data === "name") {
+        return setNameVerify(true);
+      }
+      setEmail("");
+      setPassword("");
+      setPassword2("");
+      registerModalClose();
     } catch (err) {
       console.error("Error", err);
     }
@@ -66,7 +53,7 @@ function Register({ registerModalClose }: RegisterPropsType) {
   };
 
   //? FORM 데이터 검증
-  const formVerify = async (email: string, pw1: string, pw2: string, name: string) => {
+  const formVerify = (email: string, pw1: string, pw2: string) => {
     const emailCase = email.split("@")[1];
     if (!emailCase.includes(".com")) {
       setEmailError("Email is not Correct! EX: Email@address.com");
@@ -77,21 +64,19 @@ function Register({ registerModalClose }: RegisterPropsType) {
       setPasswordVerify(true);
       return false;
     }
-    if (await userNameHave(name)) {
-      setNameVerify(true);
-      return false;
-    }
     return true;
   };
 
   //? FORM 데이터 DB등록
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (await formVerify(email, password1, password2, name)) {
+    if (formVerify(email, password1, password2)) {
       userCreate(email, password1, name);
     }
   };
+
+  //! handleSubmit → formVerify true? userCreate(DB) false? errorStatus
 
   return (
     <>
