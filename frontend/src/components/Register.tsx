@@ -5,19 +5,37 @@ import { useState } from "react";
 import axios from "axios";
 
 function Register({ registerModalClose }: RegisterPropsType) {
+  const [nameVerify, setNameVerify] = useState(false);
   const [emailVerify, setEmailVerify] = useState(false);
   const [passwordVerify, setPasswordVerify] = useState(false);
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password1, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
+  const [emailError, setEmailError] = useState("");
+
+  //? USERNAME 존재여부 확인
+  const userNameHave = async (name: string) => {
+    try {
+      const post = await axios.post("http://localhost:3001/userName", { name });
+      if (post.data) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (err) {
+      console.error("Error", err);
+      return true;
+    }
+  };
 
   //? POST 계정생성
-  const userCreate = async (email: string, pw: string) => {
+  const userCreate = async (email: string, pw: string, name: string) => {
     try {
-      const post = await axios.post("http://localhost:3001/api", { email, pw });
-      console.log(post.data);
+      const post = await axios.post("http://localhost:3001/verify", { email, pw, name });
       if (post.data) {
-        return alert("이미 존재합니다.");
+        setEmailError("Email is Already ! Use another email please");
+        return setEmailVerify(true);
       } else {
         setEmail("");
         setPassword("");
@@ -30,6 +48,10 @@ function Register({ registerModalClose }: RegisterPropsType) {
   };
 
   //? FORM 데이터 처리
+  const nameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
+    setNameVerify(false);
+  };
   const emailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
     setEmailVerify(false);
@@ -44,26 +66,30 @@ function Register({ registerModalClose }: RegisterPropsType) {
   };
 
   //? FORM 데이터 검증
-  const formVerify = (email: string, pw1: string, pw2: string): boolean => {
+  const formVerify = async (email: string, pw1: string, pw2: string, name: string) => {
     const emailCase = email.split("@")[1];
     if (!emailCase.includes(".com")) {
+      setEmailError("Email is not Correct! EX: Email@address.com");
       setEmailVerify(true);
       return false;
     }
     if (pw1 !== pw2) {
       setPasswordVerify(true);
       return false;
-    } else {
-      return true;
     }
+    if (await userNameHave(name)) {
+      setNameVerify(true);
+      return false;
+    }
+    return true;
   };
 
   //? FORM 데이터 DB등록
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (formVerify(email, password1, password2)) {
-      userCreate(email, password1);
+    if (await formVerify(email, password1, password2, name)) {
+      userCreate(email, password1, name);
     }
   };
 
@@ -78,9 +104,16 @@ function Register({ registerModalClose }: RegisterPropsType) {
           <div className="flex flex-col w-full gap-2 justify-between items-start ">
             <div className="font-mono flex gap-4 text-white flex-grow">
               <div>Email</div>
-              <div className={emailVerify ? "text-red-400" : "hidden"}>Email is not Correct! EX: Email@address.com</div>
+              <div className={emailVerify ? "text-red-400" : "hidden"}>{emailError}</div>
             </div>
             <Input onChange={emailChange} type="email" value={email} require={true} text="Email address" />
+          </div>
+          <div className="mt-4 flex flex-col w-full gap-2 justify-between items-start ">
+            <div className="font-mono flex gap-4 text-white flex-grow">
+              <div>Username</div>
+              <div className={nameVerify ? "text-red-400" : "hidden"}>Already Have this name</div>
+            </div>
+            <Input onChange={nameChange} type="text" value={name} require={true} text="Username" />
           </div>
           <div className="mt-12 flex flex-col w-full gap-2 justify-between items-start ">
             <div className="font-mono flex gap-4 text-white flex-grow">

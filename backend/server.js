@@ -14,8 +14,9 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
 
-app.post('/api', (req, res) => {
+app.post('/verify', (req, res) => {
     //? 데이터 가공, 비밀번호 암호화
+    const name = req.body.name;
     const email = req.body.email;
     const pw = crypto.createHash('sha512').update(req.body.pw).digest('base64');
 
@@ -25,7 +26,7 @@ app.post('/api', (req, res) => {
         if (idData.includes(email)) {
             return res.send(true);
         } else {
-            db.query('INSERT INTO people (id, pw) VALUES (?, ?)', [email, pw], (err, result) => {
+            db.query('INSERT INTO people (id, pw, name) VALUES (?, ?, ?)', [email, pw, name], (err, result) => {
                 if (err) {
                     console.error('데이터 삽입에러', err);
                 } else {
@@ -33,6 +34,20 @@ app.post('/api', (req, res) => {
                     return res.send(false);
                 }
             });
+        }
+    });
+});
+
+app.post('/userName', (req, res) => {
+    const name = req.body.name;
+
+    db.query('SELECT name FROM people', (err, result) => {
+        const nameData = result.map((item) => item.name);
+
+        if (nameData.includes(name)) {
+            return res.send(true);
+        } else {
+            return res.send(false);
         }
     });
 });
