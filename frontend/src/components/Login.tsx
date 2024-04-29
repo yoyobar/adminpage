@@ -35,8 +35,9 @@ function Login() {
   const loginAttempt = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const loginStatus = await axios.post("http://localhost:3001/login", { email, password });
-    if (loginStatus) {
-      return localStorage.setItem("token", loginStatus.data);
+    if (loginStatus.data) {
+      window.location.reload();
+      return localStorage.setItem("token", JSON.stringify(loginStatus.data));
     }
     return setLoginVerify(true);
   };

@@ -41,6 +41,19 @@ app.post('/register', (req, res) => {
         }
     });
 });
+
+//? 토큰 검증
+// app.post('/verify', (req, res) => {
+//     db.query('SELECT `key`, refreshKey FROM secretKey', (err, result) => {
+//         const key = crypto.createHash('sha512').update(result[0].key).digest('base64');
+//         const refreshKey = crypto.createHash('sha512').update(result[0].refreshKey).digest('base64');
+
+//         jwt.verify(req.body.myToken, key, (err, result) => {
+//             if(err.expiredAt === Date())
+//         });
+//     });
+// });
+
 //? 토큰 생성
 const tokenCreate = (email, callback) => {
     db.query('SELECT `key`, refreshKey FROM secretKey', (err, result) => {
@@ -66,6 +79,7 @@ const tokenSave = (email, token, refreshToken, callback) => {
 app.post('/login', (req, res) => {
     const email = req.body.email;
     const pw = crypto.createHash('sha512').update(req.body.password).digest('base64');
+    console.log(pw);
 
     db.query('SELECT id, pw FROM people', (err, result) => {
         const emailData = result.map((item) => item.id);
@@ -74,8 +88,12 @@ app.post('/login', (req, res) => {
         for (let i = 0; i < emailData.length; i++) {
             if (emailData[i].includes(email) && pwData[i].includes(pw)) {
                 tokenCreate(email, (result) => {
-                    res.send(result);
+                    res.json({
+                        token: result,
+                        expire: Date.now() + 60 * 1000,
+                    });
                 });
+
                 return;
             }
         }
