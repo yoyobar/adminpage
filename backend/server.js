@@ -41,6 +41,26 @@ app.post('/register', (req, res) => {
         }
     });
 });
+//? 토큰 생성
+const tokenCreate = (email, callback) => {
+    db.query('SELECT `key`, refreshKey FROM secretKey', (err, result) => {
+        const key = crypto.createHash('sha512').update(result[0].key).digest('base64');
+        const refreshKey = crypto.createHash('sha512').update(result[0].refreshKey).digest('base64');
+
+        const token = jwt.sign({ email: email }, key, { expiresIn: '1m' });
+        const refreshToken = jwt.sign({ email: email }, refreshKey, { expiresIn: '1d' });
+
+        tokenSave(email, token, refreshToken, callback);
+    });
+};
+
+//? 토큰 DB 등록
+const tokenSave = (email, token, refreshToken, callback) => {
+    db.query(`UPDATE people SET token = '${token}', refreshtoken = '${refreshToken}' WHERE id = '${email}'`, (err, result) => {
+        console.log(result);
+        callback(token);
+    });
+};
 
 //? 로그인 검증
 app.post('/login', (req, res) => {
@@ -53,12 +73,13 @@ app.post('/login', (req, res) => {
 
         for (let i = 0; i < emailData.length; i++) {
             if (emailData[i].includes(email) && pwData[i].includes(pw)) {
-                //TODO : 데이터 존재함
-                return console.log('true');
+                tokenCreate(email, (result) => {
+                    res.send(result);
+                });
+                return;
             }
         }
-        //TODO : 데이터 없음
-        return console.log('no have');
+        res.send(false);
     });
 });
 
