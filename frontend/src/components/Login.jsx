@@ -18,6 +18,29 @@ export default function Login() {
     if (event.name === "pw") setPw(event.value);
     if (event.name === "key") setKey(event.value);
   };
+  const adminLoginHandle = (e) => {
+    e.preventDefault();
+    const dataForm = {
+      email: id,
+      password: pw,
+      key: key,
+    };
+    axios
+      .post("http://localhost:3001/login", dataForm, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        const myToken = {
+          token: response.data,
+          expire: Date.now() + 60 * 60 * 1000,
+        };
+        localStorage.setItem("token", JSON.stringify(myToken));
+        nav("/task", { replace: true });
+      });
+  };
+
   const loginHandle = (response) => {
     const decodeToken = jwtDecode(response.credential);
     const dataForm = {
@@ -50,7 +73,7 @@ export default function Login() {
   };
 
   return (
-    <form className="flex gap-4 flex-col w-full h-full justify-center items-center">
+    <form onSubmit={adminLoginHandle} className="flex gap-4 flex-col w-full h-full justify-center items-center">
       <div className="font-mono text-4xl mb-8 text-white">ADMIN PAGE TEMPLATE</div>
       <GoogleLogin shape="square" size="large" theme={"filled_black"} onSuccess={loginHandle} onFailure={errorHandle} cookiePolicy={"single_host_origin"} width={"400px"} />
       <div className="w-[400px] mt-8">

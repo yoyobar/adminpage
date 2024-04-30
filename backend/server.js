@@ -31,12 +31,9 @@ const createToken = (user, exp) => {
 };
 
 //! 토큰 검증
-const verifyToken = (token) => {
+const verifyToken = (token, callback) => {
     const data = jwt.decode(token, process.env.SECRET_KEY, { algorithm: 'HS256' });
-    const expires = data?.exp;
-
-    if (Date.now() <= expires) return false;
-    if (data === null) return false;
+    if (!data || !data.exp) return callback();
 
     console.log('Verify!');
     return token;
@@ -46,14 +43,65 @@ app.post('/verify', (req, res) => {
     res.send(verifyToken(req.body.token));
 });
 
+//! 어드민 로그인 처리
+const adminLogin = (email, password, key, callback) => {
+    const info = {
+        adminId: email,
+        adminPw: crypto.createHash('sha256').update(password).digest('base64'),
+        adminKey: key,
+    };
+    db.query(`SELECT adminId, adminPw, adminKey FROM admin`, (err, data) => {
+        if (err) return;
+        if (data.length === 0) return;
+
+        if (JSON.stringify(info) !== JSON.stringify(data[0])) {
+            return null;
+        }
+
+        const exp = Date.now() + 60 * 60 * 1000;
+
+        const token = createToken(email, exp);
+        callback(token);
+    });
+};
+
 //! 로그인 처리
 app.post('/login', (req, res) => {
+    //? 일반 유저 정보
     const request = req.body;
     const email = request?.email;
     const name = request?.name;
     const expire = request?.exp;
+
+    //? 어드민 유저 정보
+    const key = request?.key;
     if (Object.values(request).length === 0) {
         return res.status(400).send('BAD REQUEST');
+    }
+    //? KEY값이 존재하는 어드민의 경우
+    if (key) {
+        const password = request?.password;
+        const info = {
+            adminId: email,
+            adminPw: crypto.createHash('sha256').update(password).digest('base64'),
+            adminKey: key,
+        };
+        db.query(`SELECT adminId, adminPw, adminKey FROM admin`, (err, data) => {
+            if (err) return;
+            if (data.length === 0) return;
+
+            if (JSON.stringify(info) !== JSON.stringify(data[0])) {
+                return null;
+            }
+
+            const exp = Date.now() + 60 * 1000;
+
+            const token = createToken(email, exp);
+            res.json({
+                token,
+                token_type: 'Bearer',
+            });
+        });
     }
 
     //? 아이디가 있을 경우
