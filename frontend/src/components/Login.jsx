@@ -4,8 +4,10 @@ import Button from "./ui/Button";
 import Input from "./ui/Input";
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+  const nav = useNavigate();
   const [id, setId] = useState("");
   const [pw, setPw] = useState("");
   const [key, setKey] = useState("");
@@ -23,7 +25,6 @@ export default function Login() {
       name: decodeToken.name,
       exp: decodeToken.exp,
     };
-
     axios
       .post("http://localhost:3001/login", dataForm, {
         headers: {
@@ -37,6 +38,7 @@ export default function Login() {
           expire: Date.now() + 60 * 60 * 1000,
         };
         localStorage.setItem("token", JSON.stringify(myToken));
+        nav("/task", { replace: true });
       })
       .catch((error) => {
         //? 실패시 에러 메세지 출력

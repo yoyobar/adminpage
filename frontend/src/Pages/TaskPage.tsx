@@ -1,6 +1,7 @@
-
+import useVerify from "../hooks/useVerify";
 
 export default function TaskPage() {
+  useVerify();
 
   return (
     <>

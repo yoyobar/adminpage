@@ -2,7 +2,6 @@ require('dotenv').config();
 const db = require('./database/db');
 const express = require('express');
 const cors = require('cors');
-const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 
@@ -12,7 +11,6 @@ const app = express();
 
 //? Parser MiddleWare
 app.use(express.json());
-app.use(cookieParser());
 app.use(
     cors({
         origin: 'http://localhost:5173',
@@ -38,9 +36,15 @@ const verifyToken = (token) => {
     const expires = data?.exp;
 
     if (Date.now() <= expires) return false;
+    if (data === null) return false;
 
+    console.log('Verify!');
     return token;
 };
+
+app.post('/verify', (req, res) => {
+    res.send(verifyToken(req.body.token));
+});
 
 //! 로그인 처리
 app.post('/login', (req, res) => {
