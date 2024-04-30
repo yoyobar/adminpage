@@ -32,7 +32,11 @@ export default function Login() {
       })
       .then((response) => {
         //? 성공시 response를 local에 저장
-        console.log(response);
+        const myToken = {
+          token: response.data,
+          expire: Date.now() + 60 * 60 * 1000,
+        };
+        localStorage.setItem("token", JSON.stringify(myToken));
       })
       .catch((error) => {
         //? 실패시 에러 메세지 출력

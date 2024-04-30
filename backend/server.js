@@ -7,13 +7,19 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 
 //? CONST
-const port = 3001; // React의 포트 번호와 다르게 하기 위해
+const port = 3001;
 const app = express();
 
 //? Parser MiddleWare
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors());
+app.use(
+    cors({
+        origin: 'http://localhost:5173',
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+        credentials: true,
+    })
+);
 
 //! 토큰 생성
 const createToken = (user, exp) => {
@@ -55,7 +61,7 @@ app.post('/login', (req, res) => {
         const token = createToken(email, expire);
         res.json({
             token,
-            expire,
+            token_type: 'Bearer',
         });
     });
 
@@ -68,7 +74,7 @@ app.post('/login', (req, res) => {
         const token = createToken(email, expire);
         res.json({
             token,
-            expire,
+            token_type: 'Bearer',
         });
     });
 });

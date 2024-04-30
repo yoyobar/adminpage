@@ -7,7 +7,7 @@ function App() {
     <>
       <Routes>
         <Route path="/" element={<LoginPage />} />
-        <Route path="*" element={<BadRequest/>} />
+        <Route path="*" element={<BadRequest />} />
       </Routes>
     </>
   );
