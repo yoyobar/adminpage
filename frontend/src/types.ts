@@ -10,13 +10,10 @@ interface ButtonType {
 interface InputType {
   text: string;
   type: string;
+  name?: string;
   value?: string;
   require?: boolean;
   onChange?: react.ChangeEventHandler<HTMLInputElement>;
 }
 
-interface RegisterPropsType {
-  registerModalClose: () => void;
-}
-
-export type { ButtonType, InputType, RegisterPropsType };
+export type { ButtonType, InputType };

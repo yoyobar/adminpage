@@ -1,10 +1,9 @@
 import Button from "./ui/Button";
 import Input from "./ui/Input";
-import { RegisterPropsType } from "../types";
 import { useState } from "react";
 import axios from "axios";
 
-function Register({ registerModalClose }: RegisterPropsType) {
+function Register() {
   const [nameVerify, setNameVerify] = useState(false);
   const [emailVerify, setEmailVerify] = useState(false);
   const [passwordVerify, setPasswordVerify] = useState(false);
@@ -28,7 +27,6 @@ function Register({ registerModalClose }: RegisterPropsType) {
       setEmail("");
       setPassword("");
       setPassword2("");
-      registerModalClose();
     } catch (err) {
       console.error("Error", err);
     }
@@ -81,9 +79,7 @@ function Register({ registerModalClose }: RegisterPropsType) {
   return (
     <>
       <form onSubmit={handleSubmit} className="flex opacity-95 flex-col justify-center items-center absolute right-0 top-0 w-[100%] h-full bg-slate-900">
-        <div className="absolute top-2 right-10">
-          <Button type="button" onClick={registerModalClose} text=">" color="gray" />
-        </div>
+        <div className="absolute top-2 right-10"></div>
         <div className="w-10/12 flex-col flex justify-center items-center">
           <div className="text-white text-center text-2xl mb-8 font-bold">Sign in Your Account</div>
           <div className="flex flex-col w-full gap-2 justify-between items-start ">

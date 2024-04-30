@@ -1,10 +1,11 @@
 import { InputType } from "../../types";
 
-export default function Input({ value, text, type, require, onChange }: InputType) {
+export default function Input({ value, text, name, type, require, onChange }: InputType) {
   return (
     <>
       <input
-        autoComplete="none"
+        autoComplete="off"
+        name={name}
         type={type}
         value={value}
         required={require}
