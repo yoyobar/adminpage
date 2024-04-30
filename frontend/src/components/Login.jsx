@@ -3,6 +3,7 @@ import { jwtDecode } from "jwt-decode";
 import Button from "./ui/Button";
 import Input from "./ui/Input";
 import { useState } from "react";
+import axios from "axios";
 
 export default function Login() {
   const [id, setId] = useState("");
@@ -17,6 +18,26 @@ export default function Login() {
   };
   const loginHandle = (response) => {
     const decodeToken = jwtDecode(response.credential);
+    const dataForm = {
+      email: decodeToken.email,
+      name: decodeToken.name,
+      exp: decodeToken.exp,
+    };
+
+    axios
+      .post("http://localhost:3001/login", dataForm, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        //? 성공시 response를 local에 저장
+        console.log(response);
+      })
+      .catch((error) => {
+        //? 실패시 에러 메세지 출력
+        console.log(error);
+      });
   };
   const errorHandle = (error) => {
     console.error(error);
