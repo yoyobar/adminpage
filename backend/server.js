@@ -31,9 +31,9 @@ const createToken = (user, exp) => {
 };
 
 //! 토큰 검증
-const verifyToken = (token, callback) => {
+const verifyToken = (token) => {
     const data = jwt.decode(token, process.env.SECRET_KEY, { algorithm: 'HS256' });
-    if (!data || !data.exp) return callback();
+    if (!data || !data.exp) return null;
 
     console.log('Verify!');
     return token;
@@ -42,28 +42,6 @@ const verifyToken = (token, callback) => {
 app.post('/verify', (req, res) => {
     res.send(verifyToken(req.body.token));
 });
-
-//! 어드민 로그인 처리
-const adminLogin = (email, password, key, callback) => {
-    const info = {
-        adminId: email,
-        adminPw: crypto.createHash('sha256').update(password).digest('base64'),
-        adminKey: key,
-    };
-    db.query(`SELECT adminId, adminPw, adminKey FROM admin`, (err, data) => {
-        if (err) return;
-        if (data.length === 0) return;
-
-        if (JSON.stringify(info) !== JSON.stringify(data[0])) {
-            return null;
-        }
-
-        const exp = Date.now() + 60 * 60 * 1000;
-
-        const token = createToken(email, exp);
-        callback(token);
-    });
-};
 
 //! 로그인 처리
 app.post('/login', (req, res) => {

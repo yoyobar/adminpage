@@ -12,12 +12,20 @@ export default function Login() {
   const [pw, setPw] = useState("");
   const [key, setKey] = useState("");
 
+  //? INPUT HANDLER
   const inputHandler = (e) => {
     const event = e.target;
     if (event.name === "id") setId(event.value);
     if (event.name === "pw") setPw(event.value);
     if (event.name === "key") setKey(event.value);
   };
+
+  //? ERROR HANDLER
+  const errorHandle = (error) => {
+    console.error(error);
+  };
+
+  //? ADMIN LOGIN
   const adminLoginHandle = (e) => {
     e.preventDefault();
     const dataForm = {
@@ -38,9 +46,11 @@ export default function Login() {
         };
         localStorage.setItem("token", JSON.stringify(myToken));
         nav("/task", { replace: true });
-      });
+      })
+      .catch((err) => errorHandle(err));
   };
 
+  // //? USER LOGIN
   const loginHandle = (response) => {
     const decodeToken = jwtDecode(response.credential);
     const dataForm = {
@@ -55,7 +65,6 @@ export default function Login() {
         },
       })
       .then((response) => {
-        //? 성공시 response를 local에 저장
         const myToken = {
           token: response.data,
           expire: Date.now() + 60 * 60 * 1000,
@@ -63,13 +72,7 @@ export default function Login() {
         localStorage.setItem("token", JSON.stringify(myToken));
         nav("/task", { replace: true });
       })
-      .catch((error) => {
-        //? 실패시 에러 메세지 출력
-        console.log(error);
-      });
-  };
-  const errorHandle = (error) => {
-    console.error(error);
+      .catch((error) => errorHandle(error));
   };
 
   return (

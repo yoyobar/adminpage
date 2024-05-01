@@ -1,5 +1,5 @@
-export const getToken = () => {
-  const myToken = JSON.parse(localStorage.getItem("token"));
+export default function getToken() {
+  const myToken = JSON.parse(localStorage.getItem("token") as string);
 
   if (!myToken) return null;
 
@@ -9,4 +9,4 @@ export const getToken = () => {
   }
 
   return myToken.token;
-};
+}
