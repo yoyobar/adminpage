@@ -12,7 +12,6 @@ function verifyToken() {
 
 export default function TaskPage() {
   const nav = useNavigate();
-
   const { isLoading, isError, data } = useQuery("verifyToken", verifyToken, {
     retry: false,
   });
@@ -25,7 +24,7 @@ export default function TaskPage() {
 
   return (
     <>
-      <div className="w-full h-full flex">태스크테스트</div>
+      <div>페이지 테스트</div>
     </>
   );
 }
