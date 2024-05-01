@@ -35,7 +35,7 @@ const verifyToken = (token) => {
     const data = jwt.decode(token, process.env.SECRET_KEY, { algorithm: 'HS256' });
     if (!data) return null;
 
-    console.log('Verify!');
+    console.log('Verify!' + new Date().toLocaleTimeString());
     return token;
 };
 
