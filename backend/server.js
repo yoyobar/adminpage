@@ -33,7 +33,7 @@ const createToken = (user, exp) => {
 //! 토큰 검증
 const verifyToken = (token) => {
     const data = jwt.decode(token, process.env.SECRET_KEY, { algorithm: 'HS256' });
-    if (!data || !data.exp) return null;
+    if (!data) return null;
 
     console.log('Verify!');
     return token;

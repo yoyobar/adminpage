@@ -14,12 +14,17 @@ export default function TaskPage() {
   const nav = useNavigate();
   const { isLoading, isError, data } = useQuery("verifyToken", verifyToken, {
     retry: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: true,
   });
 
   if (isLoading) return null;
+
   if (isError || !data) {
     localStorage.removeItem("token");
     nav("/");
+    window.location.reload();
   }
 
   return (
