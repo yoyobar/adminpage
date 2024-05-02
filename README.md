@@ -14,19 +14,19 @@
 
 `oAuth` 로그인 및 자체회원가입 기능이 존재하고 DB와 연동되어 작동하는 어드민 페이지 프로젝트입니다.<br>
 개인 회원은 에 다양한 글과 댓글을 작성할 수 있으며, 어드민 페이지에서는 모든 글을 확인할 수 있고, 모든 사용자를 제거할 수 있습니다.<br>
-어드민은 `admin@admin.com` / `1325`로 DB에 등록되어 있습니다.
+어드민은 DB에 직접 바인딩하여 사용가능<br> `CREATE TABLE id VARCHAR(100) PRIMARY KEY, pw VARCHAR(100), role INTERGER, exp INTEGER`
 
 ### 기능 구현
 
 - 인증 구현
 
-🧑🏻‍💻 Dev..
-
 - 게시글 구현
 
-- 댓글 구현
+🧑🏻‍💻 Dev..
 
 - 어드민 페이지 구현
+
+- 댓글, 부가 기능 구현
 
 
 ### Trouble Shooting
