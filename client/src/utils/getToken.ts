@@ -1,6 +1,7 @@
+import axios from "axios";
 import { TokenType } from "../types";
 
-export default function getToken() {
+export default async function getToken() {
   const localToken = localStorage.getItem("token");
   if (localToken === null) return null;
 
@@ -11,5 +12,7 @@ export default function getToken() {
     return null;
   }
 
-  return myToken.token;
+  const { data } = await axios.post("http://localhost:3001/verify", myToken);
+  if (data.error) return false;
+  return true;
 }

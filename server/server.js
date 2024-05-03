@@ -31,16 +31,28 @@ const createToken = (user, exp) => {
 };
 
 //! 토큰 검증
-const verifyToken = (token) => {
+const verifyToken = ({ token }) => {
     const data = jwt.decode(token, process.env.SECRET_KEY, { algorithm: 'HS256' });
-    if (!data) return null;
 
-    console.log('Verify!' + new Date().toLocaleTimeString());
-    return token;
+    if (!data) {
+        console.log('No Verify!' + new Date().toLocaleTimeString());
+        return false;
+    } else {
+        console.log('Verify!' + new Date().toLocaleTimeString());
+        return token;
+    }
 };
 
 app.post('/verify', (req, res) => {
-    res.send(verifyToken(req.body.token));
+    if (verifyToken(req.body.token)) {
+        return res.json({
+            error: 0,
+        });
+    } else {
+        return res.json({
+            error: 1,
+        });
+    }
 });
 
 //! 로그인 처리

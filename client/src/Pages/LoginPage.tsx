@@ -6,8 +6,10 @@ export default function LoginPage() {
   const nav = useNavigate();
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) nav("/task", { replace: true });
-  });
+    if (token) {
+      nav("/task", { replace: true });
+    }
+  }, []);
 
   return (
     <>

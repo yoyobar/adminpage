@@ -6,7 +6,8 @@ export default function BadRequest() {
 
   useEffect(() => {
     nav("/", { replace: true });
-  });
+    window.location.reload();
+  }, []);
 
   return <></>;
 }
