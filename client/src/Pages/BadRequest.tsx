@@ -5,7 +5,7 @@ export default function BadRequest() {
   const nav = useNavigate();
 
   useEffect(() => {
-    nav(-1);
+    nav("/", { replace: true });
   });
 
   return <></>;

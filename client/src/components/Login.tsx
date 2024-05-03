@@ -53,7 +53,7 @@ export default function Login() {
   };
 
   //? USER LOGIN
-  const loginHandle = (response: CredentialResponse) => {
+  const googleLoginHandle = (response: CredentialResponse) => {
     if (response.credential === undefined) return errorHandle();
 
     const decodeToken: LoginType = jwtDecode(response.credential);
@@ -82,7 +82,7 @@ export default function Login() {
   return (
     <form onSubmit={adminLoginHandle} className="flex gap-4 flex-col w-full h-full justify-center items-center">
       <div className="font-mono text-4xl mb-8 text-white">ADMIN PAGE TEMPLATE</div>
-      <GoogleLogin shape="square" size="large" theme={"filled_black"} onSuccess={loginHandle} onError={errorHandle} width={"400px"} />
+      <GoogleLogin shape="square" size="large" theme={"filled_black"} onSuccess={googleLoginHandle} onError={errorHandle} width={"400px"} />
       <div className="w-[400px] mt-8">
         <div className="pl-2 text-xl text-mono text-white">EMAIL</div>
         <Input name={"id"} text={"Admin ID..."} type="email" onChange={inputHandler} require={true} value={id}></Input>
