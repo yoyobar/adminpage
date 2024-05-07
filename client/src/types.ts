@@ -3,6 +3,7 @@ interface ButtonType {
   color: "indigo" | "green" | "red" | "gray";
   type: "submit" | "button";
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  className?: string;
 }
 
 interface InputType {
@@ -30,4 +31,15 @@ interface TokenType {
   token: object;
 }
 
-export type { ButtonType, InputType, LoginType, AdminLoginType, TokenType };
+interface SearchType {
+  logout: () => void;
+}
+
+interface NavType {
+  active: boolean;
+  name: string;
+  count: number;
+  clickHandler: (e: React.MouseEvent<HTMLButtonElement>) => void;
+}
+
+export type { ButtonType, InputType, LoginType, AdminLoginType, TokenType, SearchType, NavType };

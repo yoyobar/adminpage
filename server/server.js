@@ -108,7 +108,7 @@ app.post('/login', (req, res) => {
     });
 
     //? 아이디가 없을 경우
-    db.query(`INSERT INTO people (email, username, exp) VALUES ('${email}', '${name}', '${expire}') `, (err, data) => {
+    db.query(`INSERT INTO people (email, username, exp) VALUES ('${email}', '${name}', '${expire}')`, (err, data) => {
         if (err) return;
         if (data.length === 0) return;
         console.log('DB ID CREATE');

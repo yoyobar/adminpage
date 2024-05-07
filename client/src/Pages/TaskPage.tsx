@@ -1,9 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import Button from "../components/ui/Button";
 import { useQuery } from "react-query";
 import getToken from "../utils/getToken";
 import BadRequest from "./BadRequest";
 import Loading from "../components/Loading";
+import Search from "../components/Search";
+import Nav from "../components/Nav";
+import Task from "../components/Task";
 
 export default function TaskPage() {
   const nav = useNavigate();
@@ -26,19 +28,15 @@ export default function TaskPage() {
   );
 
   if (isLoading) return <Loading />;
-  if (isError) {
-    localStorage.removeItem("token");
-    return <BadRequest />;
-  }
-  if (!data) {
-    localStorage.removeItem("token");
-    return <BadRequest />;
-  }
-
-  return (
-    <>
-      <div>페이지 테스트</div>
-      <Button onClick={logoutHandler} text="로그아웃" color="red" type="button" />
-    </>
+  return isError || !data ? (
+    <BadRequest />
+  ) : (
+    <div className="pt-2 bg-white w-full h-full">
+      <Search logout={logoutHandler} />
+      <div className="flex w-full h-full">
+        <Nav />
+        <Task />
+      </div>
+    </div>
   );
 }

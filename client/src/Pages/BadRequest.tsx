@@ -5,6 +5,7 @@ export default function BadRequest() {
   const nav = useNavigate();
 
   useEffect(() => {
+    localStorage.removeItem("token");
     nav("/", { replace: true });
     window.location.reload();
   }, []);
