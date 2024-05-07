@@ -42,4 +42,28 @@ interface NavType {
   clickHandler: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-export type { ButtonType, InputType, LoginType, AdminLoginType, TokenType, SearchType, NavType };
+interface NewType {
+  onClickHandler: (e: React.MouseEvent<HTMLButtonElement>) => void;
+}
+interface StoreType {
+  task:
+    | null
+    | {
+        descID: number;
+        title: string;
+        description: string;
+        type: string;
+      }[];
+
+  loadTask: () => Promise<void>;
+  cleanTask: () => void;
+}
+
+interface TaskItemType {
+  descID: number;
+  title: string;
+  description: string;
+  type: string;
+}
+
+export type { ButtonType, InputType, LoginType, AdminLoginType, TokenType, SearchType, NavType, NewType, StoreType, TaskItemType };

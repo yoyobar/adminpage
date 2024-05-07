@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { NavType } from "../types";
 
 export default function NavItem({ active, name, count, clickHandler }: NavType) {

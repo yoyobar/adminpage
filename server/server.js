@@ -121,6 +121,20 @@ app.post('/login', (req, res) => {
     });
 });
 
+//! 데이터 전송
+app.post('/task', ({ body }, res) => {
+    const token = body.token.token;
+    const data = jwt.decode(token, process.env.SECRET_KEY, { algorithm: 'HS256' });
+    if (!data) return;
+    setTimeout(() => {
+        db.query(`SELECT descID, title, description, type FROM CONTENT WHERE name='${data.user}'`, (err, data) => {
+            if (err) return;
+            if (data.length === 0) return;
+            res.send(data);
+        });
+    }, 3000);
+});
+
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });

@@ -1,17 +1,22 @@
+import { useEffect, useState } from "react";
+
 export default function Loading() {
-  return (
-    <div aria-label="Loading..." role="status" className="flex items-center space-x-2">
-      <svg className="h-20 w-20 animate-spin stroke-gray-500" viewBox="0 0 256 256">
-        <line x1="128" y1="32" x2="128" y2="64" strokeLinecap="round" strokeLinejoin="round" strokeWidth="24"></line>
-        <line x1="195.9" y1="60.1" x2="173.3" y2="82.7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="24"></line>
-        <line x1="224" y1="128" x2="192" y2="128" strokeLinecap="round" strokeLinejoin="round" strokeWidth="24"></line>
-        <line x1="195.9" y1="195.9" x2="173.3" y2="173.3" strokeLinecap="round" strokeLinejoin="round" strokeWidth="24"></line>
-        <line x1="128" y1="224" x2="128" y2="192" strokeLinecap="round" strokeLinejoin="round" strokeWidth="24"></line>
-        <line x1="60.1" y1="195.9" x2="82.7" y2="173.3" strokeLinecap="round" strokeLinejoin="round" strokeWidth="24"></line>
-        <line x1="32" y1="128" x2="64" y2="128" strokeLinecap="round" strokeLinejoin="round" strokeWidth="24"></line>
-        <line x1="60.1" y1="60.1" x2="82.7" y2="82.7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="24"></line>
-      </svg>
-      <span className="text-4xl font-medium text-gray-500">Loading...</span>
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  return loading ? (
+    <div className="relative left-0 top-0 w-full h-full">
+      <div className="border-gray-300 left-[50%] top-[50%] absolute w-[90px] h-[90px] animate-spin rounded-full border-8 border-t-blue-600" />
+      <div className="text-2xl absolute left-[48%] top-[58%]">Task Loading...</div>
     </div>
+  ) : (
+    <div className="text-2xl pl-2 pt-2">No Task Data, New one!</div>
   );
 }
