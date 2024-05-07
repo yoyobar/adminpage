@@ -1,7 +1,13 @@
 import Button from "./ui/Button";
 import { TaskItemType } from "../types";
+import useTask from "../store";
 
 export default function TaskItem({ descID, title, description, type }: TaskItemType) {
+  const { deleteTask } = useTask();
+
+  const buttonHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+    deleteTask(e.currentTarget.name);
+  };
   const ID = String(descID);
   return (
     <div className="font-mono w-full p-4">
@@ -12,7 +18,7 @@ export default function TaskItem({ descID, title, description, type }: TaskItemT
             {title} | {type}
           </label>
           <Button text=">" color="indigo" type="button" />
-          <Button text="X" color="red" type="button" />
+          <Button name={ID} onClick={buttonHandler} text="X" color="red" type="button" />
         </div>
         <ul className="font-thin">{description}</ul>
       </div>

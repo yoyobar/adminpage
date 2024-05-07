@@ -1,12 +1,13 @@
-interface ButtonType {
+export interface ButtonType {
   text: string;
   color: "indigo" | "green" | "red" | "gray";
   type: "submit" | "button";
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   className?: string;
+  name?: string;
 }
 
-interface InputType {
+export interface InputType {
   text: string;
   type: string;
   name?: string;
@@ -15,30 +16,37 @@ interface InputType {
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
 }
 
-interface LoginType {
+export interface LoginType {
   email: string;
   name: string;
   exp: string;
 }
-interface AdminLoginType {
+export interface AdminLoginType {
   email: string;
   password: string;
   key: string;
 }
 
-interface TokenType {
+export interface TokenType {
   expire: number;
   token: object;
 }
 
-interface SearchType {
+export interface SearchType {
   logout: () => void;
 }
 
-interface NewType {
+export interface NewType {
   onClickHandler: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
-interface StoreType {
+
+export interface FormData {
+  title: string;
+  description: string;
+  stat: boolean;
+  type: string;
+}
+export interface StoreType {
   task:
     | null
     | {
@@ -55,12 +63,15 @@ interface StoreType {
         description: string;
         type: string;
       }[];
+  view: string;
   loadTask: () => Promise<void>;
   cleanTask: () => void;
   viewTask: (task: string) => void;
+  deleteTask: (id: string) => void;
+  createTask: (form: FormData) => void;
 }
 
-interface TaskItemType {
+export interface TaskItemType {
   descID: number;
   title: string;
   description: string;
@@ -68,17 +79,15 @@ interface TaskItemType {
   stat?: boolean;
 }
 
-interface NavItemType {
+export interface NavItemType {
   type: string;
   count: number;
   stat: boolean;
   clickHandler?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-interface CountDataItemType {
+export interface CountDataItemType {
   type: string;
   count: number;
   stat: boolean;
 }
-
-export type { ButtonType, InputType, LoginType, AdminLoginType, TokenType, SearchType, NewType, StoreType, TaskItemType, CountDataItemType, NavItemType };

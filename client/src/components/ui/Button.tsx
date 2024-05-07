@@ -1,6 +1,6 @@
 import { ButtonType } from "../../types";
 
-export default function Button({ text, color, type, onClick, className }: ButtonType) {
+export default function Button({ text, color, type, name, onClick, className }: ButtonType) {
   let buttonClass: string = "transition delay-100 text-white px-4 py-2 rounded";
   switch (color) {
     case "indigo":
@@ -20,7 +20,7 @@ export default function Button({ text, color, type, onClick, className }: Button
 
   return (
     <>
-      <button type={type} value={text} className={buttonClass} onClick={onClick}>
+      <button name={name} type={type} value={text} className={buttonClass} onClick={onClick}>
         {text}
       </button>
     </>
