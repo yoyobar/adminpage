@@ -35,13 +35,6 @@ interface SearchType {
   logout: () => void;
 }
 
-interface NavType {
-  active: boolean;
-  name: string;
-  count: number;
-  clickHandler: (e: React.MouseEvent<HTMLButtonElement>) => void;
-}
-
 interface NewType {
   onClickHandler: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
@@ -54,9 +47,17 @@ interface StoreType {
         description: string;
         type: string;
       }[];
-
+  filteredTask:
+    | null
+    | {
+        descID: number;
+        title: string;
+        description: string;
+        type: string;
+      }[];
   loadTask: () => Promise<void>;
   cleanTask: () => void;
+  viewTask: (task: string) => void;
 }
 
 interface TaskItemType {
@@ -64,6 +65,20 @@ interface TaskItemType {
   title: string;
   description: string;
   type: string;
+  stat?: boolean;
 }
 
-export type { ButtonType, InputType, LoginType, AdminLoginType, TokenType, SearchType, NavType, NewType, StoreType, TaskItemType };
+interface NavItemType {
+  type: string;
+  count: number;
+  stat: boolean;
+  clickHandler?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+}
+
+interface CountDataItemType {
+  type: string;
+  count: number;
+  stat: boolean;
+}
+
+export type { ButtonType, InputType, LoginType, AdminLoginType, TokenType, SearchType, NewType, StoreType, TaskItemType, CountDataItemType, NavItemType };

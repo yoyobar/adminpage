@@ -127,7 +127,7 @@ app.post('/task', ({ body }, res) => {
     const data = jwt.decode(token, process.env.SECRET_KEY, { algorithm: 'HS256' });
     if (!data) return;
     setTimeout(() => {
-        db.query(`SELECT descID, title, description, type FROM CONTENT WHERE name='${data.user}'`, (err, data) => {
+        db.query(`SELECT descID, title, description, type, stat FROM CONTENT WHERE name='${data.user}'`, (err, data) => {
             if (err) return;
             if (data.length === 0) return;
             res.send(data);

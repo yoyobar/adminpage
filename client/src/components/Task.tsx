@@ -5,8 +5,9 @@ import useTask from "../store";
 import Loading from "./Loading";
 
 export default function Task() {
+  const { filteredTask } = useTask();
   const [isVisible, setIsVisible] = useState(false);
-  const { task } = useTask();
+
   const onclickHandler = () => {
     setIsVisible(!isVisible);
   };
@@ -19,7 +20,7 @@ export default function Task() {
           +
         </button>
       </div>
-      {task ? task.map((item) => <TaskItem key={item.descID} {...item} />) : <Loading />}
+      {filteredTask ? filteredTask.map((item) => <TaskItem key={item.descID} {...item} />) : <Loading />}
     </div>
   );
 }
