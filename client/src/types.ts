@@ -1,3 +1,4 @@
+//! UI (Button.tsx, Input.tsx)
 export interface ButtonType {
   text: string;
   color: "indigo" | "green" | "red" | "gray";
@@ -16,6 +17,7 @@ export interface InputType {
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
 }
 
+//! Login.tsx 타입
 export interface LoginType {
   email: string;
   name: string;
@@ -27,6 +29,7 @@ export interface AdminLoginType {
   key: string;
 }
 
+//! getToken.ts 타입
 export interface TokenType {
   expire: number;
   token: object;
@@ -37,16 +40,22 @@ export interface SearchType {
 }
 
 export interface NewType {
-  onClickHandler: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  visibleHandler: (e: React.MouseEvent<HTMLButtonElement>) => void;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export interface FormData {
+//! New.tsx 타입
+
+interface FormData {
   title: string;
   description: string;
-  isDone: boolean;
   type: string;
 }
+export interface FormDataCheck extends FormData {
+  isDone: boolean;
+}
+
+//! Store.tsx 타입
 export interface StoreType {
   task:
     | null
@@ -74,10 +83,12 @@ export interface StoreType {
   cleanTask: () => void;
   viewTask: (task: string) => void;
   deleteTask: (id: string) => void;
-  createTask: (form: FormData) => void;
+  createTask: (form: FormDataCheck) => void;
   checkTask: (id: string) => void;
+  editTask: (id: string, form: FormData) => void;
 }
 
+//! Store.tsx / TaskItem.tsx 타입
 export interface TaskItemType {
   descID: number;
   title: string;
@@ -85,17 +96,16 @@ export interface TaskItemType {
   type: string;
   stat: number;
   isDone: boolean;
+  editorExitHandler: () => void;
+  editorHandler: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
-
-export interface NavItemType {
-  type: string;
-  count: number;
-  stat: boolean;
-  clickHandler?: (e: React.MouseEvent<HTMLButtonElement>) => void;
-}
-
+//! Store.tsx / Nav.tsx 타입
 export interface CountDataItemType {
   type: string;
   count: number;
   stat: boolean;
+}
+
+export interface NavItemType extends CountDataItemType {
+  clickHandler?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }

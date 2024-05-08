@@ -48,6 +48,37 @@ const useTask = create<StoreType>((set) => ({
     });
   },
 
+  editTask: (id, form) => {
+    set((state) => {
+      const editedTask = state.task!.map((item) => {
+        if (Number(item.descID) === Number(id)) {
+          return {
+            ...item,
+            title: form.title,
+            description: form.description,
+            type: form.type,
+          };
+        } else {
+          return {
+            ...item,
+          };
+        }
+      });
+      let filteredTask: ArgTaskType;
+      if (state.view === "ALL") {
+        filteredTask = editedTask;
+      } else {
+        filteredTask = editedTask.filter((item) => item.type === state.view);
+      }
+
+      return {
+        ...state,
+        task: editedTask,
+        filteredTask: filteredTask,
+      };
+    });
+  },
+
   checkTask: (id: string) => {
     set((state) => {
       const checkedTask = state.task!.map((item) => {
@@ -79,7 +110,18 @@ const useTask = create<StoreType>((set) => ({
 
   deleteTask: (id: string) => {
     set((state) => {
-      const updatedTask = state.task!.filter((item) => id !== String(item.descID));
+      const updatedTask = state
+        .task!.filter((item) => Number(item.descID) !== Number(id))
+        .map((item) => {
+          if (id < String(item.descID)) {
+            return {
+              ...item,
+              descID: item.descID - 1,
+            };
+          } else {
+            return { ...item };
+          }
+        });
       let filteredTask: ArgTaskType;
       if (state.view === "ALL") {
         filteredTask = updatedTask;

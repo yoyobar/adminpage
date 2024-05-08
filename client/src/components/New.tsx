@@ -4,7 +4,7 @@ import Button from "./ui/Button";
 import { NewType, FormData } from "../types";
 import useTask from "../store";
 
-export default function New({ onClickHandler, setIsVisible }: NewType) {
+export default function New({ visibleHandler, setIsVisible }: NewType) {
   const [isChecked, setIsChecked] = useState(false);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -67,7 +67,7 @@ export default function New({ onClickHandler, setIsVisible }: NewType) {
         </div>
         <div className="flex gap-4">
           <Button className="w-32" text="Submit" color="green" type="submit" />
-          <Button className="w-32" onClick={onClickHandler} text="Cancel" color="red" type="button" />
+          <Button className="w-32" onClick={visibleHandler} text="Cancel" color="red" type="button" />
         </div>
       </form>
     </div>

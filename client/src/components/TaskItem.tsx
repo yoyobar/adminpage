@@ -3,7 +3,7 @@ import { TaskItemType } from "../types";
 import useTask from "../store";
 import { useEffect, useState } from "react";
 
-export default function TaskItem({ descID, title, description, type, isDone }: TaskItemType) {
+export default function TaskItem({ descID, title, description, type, isDone, editorExitHandler, editorHandler }: TaskItemType) {
   const { task, deleteTask, checkTask } = useTask();
   const [isChecked, setIsChecked] = useState(isDone);
 
@@ -12,6 +12,7 @@ export default function TaskItem({ descID, title, description, type, isDone }: T
   }, [task]);
 
   const buttonHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+    editorExitHandler();
     deleteTask(e.currentTarget.name);
   };
 
@@ -25,13 +26,13 @@ export default function TaskItem({ descID, title, description, type, isDone }: T
       <div className="flex flex-col gap-2 border-b pb-6 pt-6">
         <div className="flex gap-4 items-center">
           <input name={ID} onChange={checkHandler} value={Number(isChecked)} checked={isChecked} className="form-checkbox " type="checkbox"></input>
-          <label className="flex-grow" htmlFor={ID}>
+          <div className="flex-grow" htmlFor={ID}>
             {title} | {type}
-          </label>
-          <Button text="> EDIT" color="indigo" type="button" />
+          </div>
+          <Button name={ID} onClick={editorHandler} text="> EDIT" color="indigo" type="button" />
           <Button name={ID} onClick={buttonHandler} text="X DEL" color="red" type="button" />
         </div>
-        <ul className="font-thin">{description}</ul>
+        <ul className="font-mono">{description}</ul>
       </div>
     </div>
   );
