@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Input from "./ui/Input";
 import Button from "./ui/Button";
-import { NewType, FormData } from "../types";
+import { NewType, FormDataCheck } from "../types";
 import useTask from "../store";
 
 export default function New({ visibleHandler, setIsVisible }: NewType) {
@@ -9,7 +9,7 @@ export default function New({ visibleHandler, setIsVisible }: NewType) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [type, setType] = useState("");
-  const { createTask, viewTask } = useTask();
+  const { task, createTask, viewTask } = useTask();
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     switch (e.target.name) {
@@ -30,7 +30,7 @@ export default function New({ visibleHandler, setIsVisible }: NewType) {
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const data: FormData = {
+    const data: FormDataCheck = {
       title: title,
       description: content,
       isDone: isChecked,
@@ -42,34 +42,32 @@ export default function New({ visibleHandler, setIsVisible }: NewType) {
   };
 
   return (
-    <div className="top-0 left-0 p-4 w-full h-full absolute bg-slate-800 font-mono opacity-95">
-      <h1 className="text-2xl mb-10 text-white">New Task</h1>
-      <form onSubmit={submitHandler}>
-        <div className="text-xl text-white">Title</div>
-        <div className="w-full mb-8">
+    <div className="absolute left-[320px] top-[100px]">
+      <div className="p-4 rounded-md z-10 select-none w-[400px] h-[550px] opacity-95 sticky bg-slate-800">
+        <h1 className="text-3xl mb-10 text-white">New Task #{task ? task.length + 1 : 1}</h1>
+        <form className="w-full flex flex-col items-start gap-4" onSubmit={submitHandler}>
+          <div className="font-mono text-white">Title</div>
           <Input name="title" value={title} onChange={onChangeHandler} require={true} type="input" text="New title..." />
-        </div>
-        <div className="text-xl text-white">Content</div>
-        <div className="w-full mb-8">
+          <div className="font-mono text-white">Content</div>
           <Input name="content" value={content} onChange={onChangeHandler} require={true} type="input" text="New subject..." />
-        </div>
-        <label className="mb-8 flex w-[140px] flex-col cursor-pointer select-none items-start">
-          <div className="text-xl text-white">is Finish?</div>
-          <div className="relative">
-            <input type="checkbox" checked={isChecked} onChange={handleCheckboxChange} className="sr-only" />
-            <div className={`box block h-8 w-14 rounded-full ${isChecked ? "bg-indigo-600" : "bg-indigo-200"}`}></div>
-            <div className={`absolute left-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-white transition ${isChecked ? "translate-x-full" : ""}`}></div>
+          <div className="font-mono text-white">Type</div>
+          <div className="w-[200px]">
+            <Input name="type" value={type} onChange={onChangeHandler} type="input" text="NO SORT" />
           </div>
-        </label>
-        <div className="font-mono text-xl mb-2 text-white">Types</div>
-        <div className="w-[200px] mb-4">
-          <Input name="type" value={type} onChange={onChangeHandler} type="input" text="NO SORT" />
-        </div>
-        <div className="flex gap-4">
-          <Button className="w-32" text="Submit" color="green" type="submit" />
-          <Button className="w-32" onClick={visibleHandler} text="Cancel" color="red" type="button" />
-        </div>
-      </form>
+          <label className="flex w-[140px] flex-col cursor-pointer select-none items-start">
+            <div className="font-mono text-white">is Finish?</div>
+            <div className="relative">
+              <input type="checkbox" checked={isChecked} onChange={handleCheckboxChange} className="sr-only" />
+              <div className={`box block h-8 w-14 rounded-full ${isChecked ? "bg-indigo-600" : "bg-indigo-200"}`}></div>
+              <div className={`absolute left-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-white transition ${isChecked ? "translate-x-full" : ""}`}></div>
+            </div>
+          </label>
+          <div className="flex gap-4">
+            <Button className="w-32" text="Submit" color="green" type="submit" />
+            <Button className="w-32" onClick={visibleHandler} text="Cancel" color="red" type="button" />
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

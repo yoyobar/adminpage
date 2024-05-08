@@ -40,8 +40,8 @@ export interface SearchType {
 }
 
 export interface NewType {
-  visibleHandler: (e: React.MouseEvent<HTMLButtonElement>) => void;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  visibleHandler: () => void;
 }
 
 //! New.tsx 타입

@@ -48,21 +48,24 @@ export default function Edit({ editView, editorExitHandler }: { editView: number
   };
 
   return (
-    <>
-      <div className="p-4 absolute opacity-95 rounded-md top-[48px] left-[300px] w-[300px] h-[300px] bg-slate-400">
-        <form name={String(id)} onSubmit={submitHandler} className="w-full flex flex-col">
-          <span className="font-mono text-white">Title</span>
+    <div className="absolute left-[320px] top-[100px]">
+      <div className={`p-4 rounded-md z-10 select-none w-[400px] h-[500px] opacity-95 sticky bg-slate-800`}>
+        <h1 className="text-3xl mb-10 text-white">Edit Task #{id}</h1>
+        <form name={String(id)} onSubmit={submitHandler} className="w-full flex flex-col items-start gap-4">
+          <span className="font-mono text-white">Title </span>
           <Input onChange={inputHandler} name="title" value={title} text="Title..." type="input" />
           <span className="font-mono text-white">Content</span>
           <Input onChange={inputHandler} name="content" value={content} text="Content..." type="input" />
           <span className="font-mono text-white">Type</span>
-          <Input onChange={inputHandler} name="type" value={type} text="Type..." type="input" />
-          <div className="mt-4 flex gap-4 w-[100%]">
-            <Button className="w-full" color="indigo" text="Apply" type="submit" />
-            <Button onClick={editorExitHandler} className="w-full" color="red" text="Cancel" type="button" />
+          <div className="w-[200px]">
+            <Input onChange={inputHandler} name="type" value={type} text="Type..." type="input" />
+          </div>
+          <div className="mt-4 flex gap-4">
+            <Button className="w-32" color="indigo" text="Apply" type="submit" />
+            <Button onClick={editorExitHandler} className="w-32" color="red" text="Cancel" type="button" />
           </div>
         </form>
       </div>
-    </>
+    </div>
   );
 }

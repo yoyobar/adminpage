@@ -5,13 +5,13 @@ import TaskPage from "./Pages/TaskPage.tsx";
 
 function App() {
   return (
-    <>
+    <div className="w-full h-full overflow-hidden">
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/task" element={<TaskPage />} />
         <Route path="*" element={<BadRequest />} />
       </Routes>
-    </>
+    </div>
   );
 }
 

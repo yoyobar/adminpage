@@ -36,13 +36,11 @@ export default function TaskPage() {
   return isError || !data ? (
     <BadRequest />
   ) : (
-    <div className="pt-2 overflow-hidden bg-white w-full h-full">
+    <div className="w-full h-full overflow-auto">
       <Search logout={logoutHandler} />
-      <div className="flex w-full h-full">
-        <>
-          <Nav />
-          <Task />
-        </>
+      <div className="w-full h-full flex">
+        <Nav />
+        <Task />
       </div>
     </div>
   );

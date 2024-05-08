@@ -11,30 +11,35 @@ export default function Task() {
   const [isEdit, setIsEdit] = useState(false);
   const [editView, setEditView] = useState(0);
 
-  const visibleHandler = () => {
-    setIsVisible(!isVisible);
-  };
-
-  const editorHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    setIsEdit(true);
-    setEditView(Number(e.currentTarget.name));
-  };
-
   const editorExitHandler = () => {
     setIsEdit(false);
   };
 
+  const visibleHandler = () => {
+    setIsVisible(!isVisible);
+    editorExitHandler();
+  };
+
+  const editorHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    setIsEdit(true);
+    setIsVisible(false);
+    setEditView(Number(e.currentTarget.name));
+  };
+
   return (
-    <div className="w-full h-full overflow-y-scroll">
+    <div className="flex flex-col w-full">
       {isVisible ? <New setIsVisible={setIsVisible} visibleHandler={visibleHandler} /> : null}
-      <div className="font-mono flex items-center gap-4 border-b p-2">
+      <div className="font-mono flex w-full bg-slate-50 items-center gap-4 border-b p-2">
         <div>Task Details</div>
-        <button onClick={visibleHandler} className="border cursor-pointer pl-2 pr-2 rounded-full hover:bg-slate-200 ">
+        <button onClick={visibleHandler} className="cursor-pointer text-white bg-green-500 pl-2 pr-2 rounded-full hover:bg-green-700 ">
           +
         </button>
       </div>
+
       {isEdit ? <Edit editorExitHandler={editorExitHandler} editView={editView} /> : null}
-      {filteredTask ? filteredTask.map((item) => <TaskItem editorExitHandler={editorExitHandler} editorHandler={editorHandler} key={item.descID} {...item} />) : <Loading />}
+      <div className="relative w-full h-full">
+        {filteredTask ? filteredTask.map((item) => <TaskItem editorExitHandler={editorExitHandler} editorHandler={editorHandler} key={item.descID} {...item} />) : <Loading />}
+      </div>
     </div>
   );
 }

@@ -113,10 +113,10 @@ const useTask = create<StoreType>((set) => ({
       const updatedTask = state
         .task!.filter((item) => Number(item.descID) !== Number(id))
         .map((item) => {
-          if (id < String(item.descID)) {
+          if (Number(item.descID) > Number(id)) {
             return {
               ...item,
-              descID: item.descID - 1,
+              descID: Number(item.descID) - 1,
             };
           } else {
             return { ...item };

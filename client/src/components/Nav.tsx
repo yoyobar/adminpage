@@ -63,8 +63,8 @@ export default function Nav() {
   }
 
   return (
-    <div className="h-full">
-      <div className="w-[300px] h-full gap-2 border-r flex flex-col p-6 items-start">
+    <div className="h-full select-none flex">
+      <div className="w-[300px] h-full gap-2 flex flex-col rounded-sm p-6 border-collapse border-r items-start">
         <div className="w-full flex gap-4"></div>
         <NavItem clickHandler={clickHandler} type="ALL" count={totalcount} stat={totalView} />
         {task ? countData.map((item) => <NavItem clickHandler={clickHandler} key={item.type} {...item} />) : null}
