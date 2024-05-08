@@ -2,7 +2,6 @@ import NavItem from "./NavItem";
 import useTask from "../store";
 import { useEffect, useState } from "react";
 import { CountDataItemType } from "../types";
-import Button from "./ui/Button";
 
 export default function Nav() {
   const { task, viewTask, view } = useTask();
@@ -66,10 +65,7 @@ export default function Nav() {
   return (
     <div className="h-full">
       <div className="w-[300px] h-full gap-2 border-r flex flex-col p-6 items-start">
-        <div className="w-full flex gap-4">
-          <Button className="w-full" text="ADD" color="indigo" type="button" />
-          <Button className="w-full" text="DEL" color="indigo" type="button" />
-        </div>
+        <div className="w-full flex gap-4"></div>
         <NavItem clickHandler={clickHandler} type="ALL" count={totalcount} stat={totalView} />
         {task ? countData.map((item) => <NavItem clickHandler={clickHandler} key={item.type} {...item} />) : null}
       </div>
