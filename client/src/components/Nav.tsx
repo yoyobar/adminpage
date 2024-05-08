@@ -35,12 +35,7 @@ export default function Nav() {
   useEffect(() => {
     if (task === null) return;
     countSort();
-    console.log("test");
   }, [task]);
-
-  useEffect(() => {
-    console.log(view);
-  });
 
   function clickHandler(e: React.MouseEvent<HTMLButtonElement>) {
     if (countData === null) return;

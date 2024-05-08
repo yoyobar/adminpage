@@ -2,7 +2,14 @@ import axios from "axios";
 import { create } from "zustand";
 import { StoreType } from "./types";
 
-// {descID: 1, title: 'Title3', description: 'Description3', type: 'ETC', stat: 0}
+type ArgTaskType = {
+  descID: number;
+  title: string;
+  description: string;
+  type: string;
+  stat: number;
+  isDone: boolean;
+}[];
 
 const useTask = create<StoreType>((set) => ({
   task: null,
@@ -18,9 +25,11 @@ const useTask = create<StoreType>((set) => ({
       console.log(error);
     }
   },
+
   cleanTask: () => {
     set({ task: null, filteredTask: null });
   },
+
   viewTask: (view: string) => {
     set((state) => {
       if (view === "ALL") {
@@ -38,10 +47,40 @@ const useTask = create<StoreType>((set) => ({
       }
     });
   },
+
+  checkTask: (id: string) => {
+    set((state) => {
+      const checkedTask = state.task!.map((item) => {
+        if (Number(item.descID) === Number(id)) {
+          return {
+            ...item,
+            isDone: !item.isDone,
+          };
+        } else {
+          return {
+            ...item,
+          };
+        }
+      });
+      let filteredTask: ArgTaskType;
+      if (state.view === "ALL") {
+        filteredTask = checkedTask;
+      } else {
+        filteredTask = checkedTask.filter((item) => item.type === state.view);
+      }
+
+      return {
+        ...state,
+        task: checkedTask,
+        filteredTask: filteredTask,
+      };
+    });
+  },
+
   deleteTask: (id: string) => {
     set((state) => {
       const updatedTask = state.task!.filter((item) => id !== String(item.descID));
-      let filteredTask: { descID: number; title: string; description: string; type: string }[];
+      let filteredTask: ArgTaskType;
       if (state.view === "ALL") {
         filteredTask = updatedTask;
       } else {

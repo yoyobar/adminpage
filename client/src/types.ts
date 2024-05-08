@@ -55,7 +55,10 @@ export interface StoreType {
         title: string;
         description: string;
         type: string;
+        stat: number;
+        isDone: boolean;
       }[];
+
   filteredTask:
     | null
     | {
@@ -63,6 +66,8 @@ export interface StoreType {
         title: string;
         description: string;
         type: string;
+        stat: number;
+        isDone: boolean;
       }[];
   view: string;
   loadTask: () => Promise<void>;
@@ -70,6 +75,7 @@ export interface StoreType {
   viewTask: (task: string) => void;
   deleteTask: (id: string) => void;
   createTask: (form: FormData) => void;
+  checkTask: (id: string) => void;
 }
 
 export interface TaskItemType {
@@ -77,7 +83,8 @@ export interface TaskItemType {
   title: string;
   description: string;
   type: string;
-  stat?: boolean;
+  stat: number;
+  isDone: boolean;
 }
 
 export interface NavItemType {

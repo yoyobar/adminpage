@@ -51,7 +51,6 @@ export default function New({ onClickHandler, setIsVisible }: NewType) {
     createTask(data);
     viewTask("ALL");
     setIsVisible(false);
-    console.log(task);
   };
 
   return (
@@ -77,7 +76,7 @@ export default function New({ onClickHandler, setIsVisible }: NewType) {
         <div className="font-mono text-xl mb-2 text-white">TYPES</div>
         <select className="mb-8 p-2 rounded-md" value={"NO SORTED"} onChange={selectHandler}>
           {option.map((item, index) => (
-            <option className="" key={index} value={item}>
+            <option key={index} value={item}>
               {item}
             </option>
           ))}
