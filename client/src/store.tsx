@@ -24,7 +24,11 @@ const useTask = create<StoreType>((set) => ({
   viewTask: (view: string) => {
     set((state) => {
       if (view === "ALL") {
-        return { ...state, filteredTask: state.task };
+        return {
+          ...state,
+          filteredTask: state.task,
+          view: view,
+        };
       } else {
         return {
           ...state,
@@ -44,8 +48,6 @@ const useTask = create<StoreType>((set) => ({
         filteredTask = updatedTask.filter((item) => item.type === state.view);
       }
 
-      console.log(state.filteredTask);
-
       return {
         ...state,
         task: updatedTask,
@@ -54,14 +56,14 @@ const useTask = create<StoreType>((set) => ({
     });
   },
   createTask: (form) => {
-    console.log(form);
     set((state) => {
       const updatedTask = {
         descID: state.task ? state.task.length + 1 : 1,
         title: form.title,
         description: form.description,
         type: form.type,
-        stat: Number(form.stat),
+        stat: 0,
+        isDone: form.isDone,
       };
       let updatedTasks;
 

@@ -38,12 +38,13 @@ export interface SearchType {
 
 export interface NewType {
   onClickHandler: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface FormData {
   title: string;
   description: string;
-  stat: boolean;
+  isDone: boolean;
   type: string;
 }
 export interface StoreType {

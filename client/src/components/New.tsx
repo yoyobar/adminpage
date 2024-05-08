@@ -4,7 +4,7 @@ import Button from "./ui/Button";
 import { NewType, FormData } from "../types";
 import useTask from "../store";
 
-export default function New({ onClickHandler }: NewType) {
+export default function New({ onClickHandler, setIsVisible }: NewType) {
   const [isChecked, setIsChecked] = useState(false);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -45,11 +45,13 @@ export default function New({ onClickHandler }: NewType) {
     const data: FormData = {
       title: title,
       description: content,
-      stat: isChecked,
+      isDone: isChecked,
       type: optionSel,
     };
     createTask(data);
     viewTask("ALL");
+    setIsVisible(false);
+    console.log(task);
   };
 
   return (
