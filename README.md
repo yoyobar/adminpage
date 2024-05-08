@@ -7,6 +7,7 @@
 <img src="https://img.shields.io/badge/-Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white">
   <img src="https://img.shields.io/badge/-TailwindCSS-647f8d?style=for-the-badge&logo=tailwindcss&logoColor=06B6D4">
   <img src="https://img.shields.io/badge/-ZUSTAND-5c1f70?style=for-the-badge">
+  <img src="https://img.shields.io/badge/-React_Query-20232a?style=for-the-badge&logo=ReactQuery&logoColor=FF4154">
 </p>
 <hr>
 
@@ -18,19 +19,17 @@
 
 ### 기능 구현
 
-- 인증 구현
+-   인증 구현
+    구현 완료, 정리 게시글 작성예정
 
-- 게시글 구현
+-   게시글 구현
+    구현 완료, 정리 게시글 작성예정
 
-🧑🏻‍💻 Dev..
+-   데이터 바인딩 수정
+    🧑🏻‍💻 Dev..
 
-- 어드민 페이지 구현
-
-- 댓글, 부가 기능 구현
-
+-   어드민 페이지 구현
 
 ### Trouble Shooting
 
-
 ### 배운 점
-
