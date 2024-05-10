@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
 import verifyToken from "../utils/verifyToken";
 import Loading from "../components/Loading";
-import Search from "../components/Search";
+import Header from "../components/Header";
 import Nav from "../components/Nav";
 import Task from "../components/Task";
 import useTask from "../store";
@@ -27,7 +27,6 @@ export default function TaskPage() {
     {
       refetchOnWindowFocus: false,
       refetchOnReconnect: true,
-      staleTime: 5000,
     }
   );
 
@@ -37,7 +36,7 @@ export default function TaskPage() {
     <LogoutPage />
   ) : (
     <div className="w-full h-full overflow-auto">
-      <Search logout={logoutHandler} />
+      <Header logout={logoutHandler} />
       <div className="w-full h-full flex">
         <Nav />
         <Task />

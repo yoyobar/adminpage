@@ -22,7 +22,7 @@ const useTask = create<StoreType>((set) => ({
   //? SERVER
   loadTask: async () => {
     try {
-      const { token } = JSON.parse(localStorage.getItem("token") as string);
+      const { token } = await JSON.parse(localStorage.getItem("token") as string);
       const data = await axios.post("http://localhost:3001/task", token);
       set({ task: data.data, filteredTask: data.data });
     } catch (error) {
@@ -32,9 +32,8 @@ const useTask = create<StoreType>((set) => ({
 
   postTask: async (task) => {
     try {
-      const { token } = JSON.parse(localStorage.getItem("token") as string);
-      const data = await axios.post("http://localhost:3001/update", { token, task: task });
-      console.log(data);
+      const { token } = await JSON.parse(localStorage.getItem("token") as string);
+      await axios.post("http://localhost:3001/update", { token, task: task });
     } catch (error) {
       console.log(error);
     }
@@ -75,6 +74,7 @@ const useTask = create<StoreType>((set) => ({
             type: form.type,
             POST: CRUD.UPDATE,
           };
+
           state.postTask(postForm);
 
           return {

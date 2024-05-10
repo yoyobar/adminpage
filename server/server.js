@@ -144,7 +144,7 @@ const createTask = (user, email) => {
         (err, data) => {
             if (err) return console.log(err);
             if (data.length === 0) return;
-            console.log(`CREATE : ${email}계정`);
+            console.log(`CREATE : ${email} Account`);
         }
     );
 };
@@ -155,7 +155,7 @@ const deleteTask = (user, email) => {
         (err, data) => {
             if (err) return console.log(err);
             if (data.length === 0) return;
-            console.log(`DELETE : ${email}계정`);
+            console.log(`DELETE : ${email} Account`);
         }
     );
 };
@@ -167,7 +167,7 @@ const editTask = (user, email) => {
         (err, data) => {
             if (err) return console.log(err);
             if (data.length === 0) return;
-            console.log(`EDIT : ${email}계정`);
+            console.log(`EDIT : ${email} Account`);
         }
     );
 };
@@ -179,7 +179,7 @@ const checkTask = (user, email) => {
         (err, data) => {
             if (err) return console.log(err);
             if (data.length === 0) return;
-            console.log(`CHECK : ${email}계정`);
+            console.log(`CHECK : ${email} Account`);
         }
     );
 };
@@ -191,17 +191,21 @@ app.post('/update', ({ body }, res) => {
     const TYPE = body.task.POST;
     if (!TOKEN) res.send(400);
 
-    //TODO: Object.keys의 length로 업데이트 작업을 분리함
-
     switch (TYPE) {
         case 'CREATE':
-            return createTask(USER, TOKEN.user);
+            createTask(USER, TOKEN.user);
+            return res.sendStatus(200);
         case 'UPDATE':
-            return editTask(USER, TOKEN.user);
+            editTask(USER, TOKEN.user);
+            return res.sendStatus(200);
         case 'CHECK':
-            return checkTask(USER, TOKEN.user);
+            checkTask(USER, TOKEN.user);
+            return res.sendStatus(200);
         case 'DELETE':
-            return deleteTask(USER, TOKEN.user);
+            deleteTask(USER, TOKEN.user);
+            return res.sendStatus(200);
+        default:
+            return res.sendStatus(500);
     }
 });
 

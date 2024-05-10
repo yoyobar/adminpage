@@ -90,6 +90,7 @@ export interface NavType {
  * @type StoreType 전체 함수 Type
  * @property {null | taskType[]} task - 전체 데이터 집합
  * @property {null | taskType[]} filteredTask - 전체 데이터 카테고리 필터 집합
+ * @property {string} view - 현재 선택 카테고리 번호
  * @property {async func} loadTask - 첫 구동 데이터 불러오기 함수
  * @property {func} logoutTask - 로그아웃 데이터 초기화 함수
  * @property {func} viewTask - 현재 카테고리 선택 필터 함수
@@ -101,7 +102,6 @@ export interface NavType {
  */
 export interface StoreType {
   task: null | TaskType[];
-
   filteredTask: null | TaskType[];
   view: string;
   loadTask: () => Promise<void>;
