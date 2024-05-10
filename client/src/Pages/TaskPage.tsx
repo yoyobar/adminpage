@@ -37,7 +37,7 @@ export default function TaskPage() {
   ) : (
     <div className="w-full h-full overflow-auto">
       <Header logout={logoutHandler} />
-      <div className="w-full h-full flex">
+      <div className="w-full h-full flex dark:bg-slate-700 transition">
         <Nav />
         <Task />
       </div>

@@ -1,6 +1,6 @@
 interface ButtonProps {
   text: string;
-  color: "indigo" | "green" | "red" | "gray";
+  color: "indigo" | "green" | "red" | "gray" | "black" | "white";
   type: "submit" | "button";
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   className?: string;
@@ -21,6 +21,12 @@ export default function Button({ text, color, type, name, onClick, className }: 
       break;
     case "gray":
       buttonClass += " bg-gray-400 hover:bg-gray-500";
+      break;
+    case "black":
+      buttonClass += " bg-black hover:bg-gray-900";
+      break;
+    case "white":
+      buttonClass += " bg-white hover:bg-gray-500";
       break;
   }
   buttonClass += ` ${className}`;

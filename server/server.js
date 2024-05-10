@@ -126,12 +126,15 @@ app.post('/task', ({ body }, res) => {
     const token = body.token;
     const data = jwt.decode(token, process.env.SECRET_KEY, { algorithm: 'HS256' });
     if (!data) return;
-    db.query(`SELECT descID, title, description, type, isDone FROM CONTENT WHERE name='${data.user}'`, (err, data) => {
-        if (err) return;
-        if (data.length === 0) return;
-        console.log('데이터 불러오기 성공');
-        res.send(data);
-    });
+
+    setTimeout(() => {
+        db.query(`SELECT descID, title, description, type, isDone FROM CONTENT WHERE name='${data.user}'`, (err, data) => {
+            if (err) return res.sendStatus(400);
+            if (data.length === 0) return res.sendStatus(204);
+            console.log('데이터 불러오기 성공');
+            res.send(data);
+        });
+    }, 1000);
 });
 
 const createTask = (user, email) => {

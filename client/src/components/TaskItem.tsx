@@ -23,15 +23,17 @@ export default function TaskItem({ descID, title, description, isDone, editorExi
   const ID = String(descID);
   return (
     <>
-      <div className={isChecked ? "relative font-mono w-full select-none bg-slate-300 text-slate-400" : "relative font-mono w-full select-none"}>
-        <div className="flex flex-col w-full h-full pr-4 justify-center gap-2">
+      <div
+        className={isChecked ? "relative font-mono w-full select-none bg-slate-300 text-slate-400 dark:bg-slate-500 " : "relative font-mono w-full select-none dark:text-white "}
+      >
+        <div className="flex flex-col w-full h-full pr-4 justify-center gap-2 transition">
           <label htmlFor={ID} className="flex flex-col">
             <div className="flex justify-center  gap-2">
               <input id={ID} name={ID} onChange={checkHandler} value={Number(isChecked)} checked={isChecked} className="hidden" type="checkbox"></input>
               <div className="flex flex-col flex-grow">
                 <div className="p-2 text-xl relative">
                   {title}
-                  {isChecked ? <span className="text-green-700 text-right font-mono absolute right-7 top-6"> Complete</span> : ""}
+                  {isChecked ? <span className="text-green-700 dark:text-green-500 text-right font-mono absolute right-7 top-6"> 완료</span> : ""}
                 </div>
 
                 <ul className="p-2 font-mono">{description}</ul>
@@ -44,7 +46,7 @@ export default function TaskItem({ descID, title, description, isDone, editorExi
           </label>
         </div>
       </div>
-      <div className="w-full border-b"></div>
+      <div className="w-full border-b dark:border-black transition"></div>
     </>
   );
 }

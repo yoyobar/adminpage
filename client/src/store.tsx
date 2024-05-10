@@ -24,9 +24,10 @@ const useTask = create<StoreType>((set) => ({
     try {
       const { token } = await JSON.parse(localStorage.getItem("token") as string);
       const data = await axios.post("http://localhost:3001/task", token);
+      if (data.status === 204) return;
       set({ task: data.data, filteredTask: data.data });
     } catch (error) {
-      console.log(error);
+      return console.log(error);
     }
   },
 
@@ -101,6 +102,13 @@ const useTask = create<StoreType>((set) => ({
     set((state) => {
       const checkedTask = state.task!.map((item) => {
         if (Number(item.descID) === Number(id)) {
+          const postForm: SelectableFormData = {
+            descID: item.descID,
+            isDone: !item.isDone,
+            POST: CRUD.CHECK,
+          };
+          state.postTask(postForm);
+
           return {
             ...item,
             isDone: !item.isDone,
@@ -111,12 +119,6 @@ const useTask = create<StoreType>((set) => ({
           };
         }
       });
-      const postForm: SelectableFormData = {
-        descID: checkedTask[0].descID,
-        isDone: checkedTask[0].isDone,
-        POST: CRUD.CHECK,
-      };
-      state.postTask(postForm);
 
       const updateTask = filterUpdate(checkedTask, state.view);
 
@@ -148,12 +150,12 @@ const useTask = create<StoreType>((set) => ({
   },
   createTask: (form) => {
     set((state) => {
-      const createForm = {
+      const createForm: TaskType = {
         descID: form.descID,
         title: form.title,
         description: form.description,
         type: form.type,
-        isDone: false,
+        isDone: form.isDone as boolean,
       };
       let updatedTasks;
 
@@ -174,6 +176,32 @@ const useTask = create<StoreType>((set) => ({
         ...state,
         task: updatedTasks,
       };
+    });
+  },
+}));
+
+interface DarkType {
+  dark: boolean;
+  lightMode: () => void;
+  darkMode: () => void;
+}
+
+export const useDark = create<DarkType>((set) => ({
+  dark: false,
+
+  lightMode: () => {
+    document.documentElement.classList.remove("dark");
+    localStorage.setItem("dark", "false");
+    set({
+      dark: false,
+    });
+  },
+
+  darkMode: () => {
+    document.documentElement.classList.add("dark");
+    localStorage.setItem("dark", "true");
+    set({
+      dark: true,
     });
   },
 }));

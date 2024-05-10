@@ -24,8 +24,9 @@ export default function Edit({ editId, editorExitHandler }: EditProps) {
     setType(type);
   }, [editId]);
 
-  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+  const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     const formData = {
       descID: id,
       title: title,
