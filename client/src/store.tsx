@@ -1,6 +1,6 @@
 import axios from "axios";
 import { create } from "zustand";
-import { TaskType, StoreType } from "./types";
+import { TaskType, StoreType, SelectableFormData, CRUD } from "./types";
 
 type UpdateArgument = (task: TaskType[], view: string) => TaskType[];
 
@@ -19,9 +19,10 @@ const useTask = create<StoreType>((set) => ({
   filteredTask: null,
   view: "ALL",
 
+  //? SERVER
   loadTask: async () => {
     try {
-      const token = JSON.parse(localStorage.getItem("token") as string);
+      const { token } = JSON.parse(localStorage.getItem("token") as string);
       const data = await axios.post("http://localhost:3001/task", token);
       set({ task: data.data, filteredTask: data.data });
     } catch (error) {
@@ -29,20 +30,22 @@ const useTask = create<StoreType>((set) => ({
     }
   },
 
-  updateTask: async (task) => {
+  postTask: async (task) => {
     try {
-      const token = JSON.parse(localStorage.getItem("token") as string);
-      const data = await axios.post("http://localhost:3001/update", { token: token, task: task });
+      const { token } = JSON.parse(localStorage.getItem("token") as string);
+      const data = await axios.post("http://localhost:3001/update", { token, task: task });
       console.log(data);
     } catch (error) {
       console.log(error);
     }
   },
 
-  cleanTask: () => {
+  //? LOGOUT
+  logoutTask: () => {
     set({ task: null, filteredTask: null });
   },
 
+  //? CRUD
   viewTask: (view: string) => {
     set((state) => {
       if (view === "ALL") {
@@ -65,11 +68,18 @@ const useTask = create<StoreType>((set) => ({
     set((state) => {
       const editedTask = state.task!.map((item) => {
         if (Number(item.descID) === Number(id)) {
-          return {
-            ...item,
+          const postForm: SelectableFormData = {
+            descID: id,
             title: form.title,
             description: form.description,
             type: form.type,
+            POST: CRUD.UPDATE,
+          };
+          state.postTask(postForm);
+
+          return {
+            ...item,
+            ...postForm,
           };
         } else {
           return {
@@ -101,6 +111,13 @@ const useTask = create<StoreType>((set) => ({
           };
         }
       });
+      const postForm: SelectableFormData = {
+        descID: checkedTask[0].descID,
+        isDone: checkedTask[0].isDone,
+        POST: CRUD.CHECK,
+      };
+      state.postTask(postForm);
+
       const updateTask = filterUpdate(checkedTask, state.view);
 
       return {
@@ -116,6 +133,12 @@ const useTask = create<StoreType>((set) => ({
       const deletedTask = state.task!.filter((item) => Number(item.descID) !== Number(id));
       const updateTask = filterUpdate(deletedTask, state.view);
 
+      const postForm: SelectableFormData = {
+        descID: Number(id),
+        POST: CRUD.DELETE,
+      };
+      state.postTask(postForm);
+
       return {
         ...state,
         task: deletedTask,
@@ -125,20 +148,26 @@ const useTask = create<StoreType>((set) => ({
   },
   createTask: (form) => {
     set((state) => {
-      const updatedTask = {
+      const createForm = {
         descID: form.descID,
         title: form.title,
         description: form.description,
         type: form.type,
-        stat: 0,
-        isDone: form.isDone!,
+        isDone: false,
       };
       let updatedTasks;
 
+      const postForm: SelectableFormData = {
+        ...createForm,
+        POST: CRUD.CREATE,
+      };
+
+      state.postTask(postForm);
+
       if (state.task) {
-        updatedTasks = [...state.task, updatedTask];
+        updatedTasks = [...state.task, createForm];
       } else {
-        updatedTasks = [updatedTask];
+        updatedTasks = [createForm];
       }
 
       return {

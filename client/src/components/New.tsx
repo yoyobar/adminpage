@@ -45,7 +45,6 @@ export default function New({ visibleHandler, setIsVisible }: NewType) {
     createTask(data);
     viewTask("ALL");
     setIsVisible(false);
-    console.log(task);
   };
 
   return (

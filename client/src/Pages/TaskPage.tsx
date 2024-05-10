@@ -9,12 +9,12 @@ import useTask from "../store";
 import LogoutPage from "./LogoutPage";
 
 export default function TaskPage() {
-  const { loadTask, cleanTask } = useTask();
+  const { loadTask, logoutTask } = useTask();
   const nav = useNavigate();
 
   const logoutHandler = () => {
     localStorage.removeItem("token");
-    cleanTask();
+    logoutTask();
     nav("/", { replace: true });
   };
 

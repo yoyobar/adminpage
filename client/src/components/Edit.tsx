@@ -32,7 +32,7 @@ export default function Edit({ editId, editorExitHandler }: EditProps) {
       description: content,
       type: type,
     };
-    editTask(String(id), formData);
+    editTask(id, formData);
     editorExitHandler();
   };
 

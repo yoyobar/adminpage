@@ -123,22 +123,86 @@ app.post('/login', (req, res) => {
 
 //! 데이터 요청
 app.post('/task', ({ body }, res) => {
-    const token = body.token.token;
+    const token = body.token;
     const data = jwt.decode(token, process.env.SECRET_KEY, { algorithm: 'HS256' });
     if (!data) return;
-    db.query(`SELECT descID, title, description, type, stat FROM CONTENT WHERE name='${data.user}'`, (err, data) => {
+    db.query(`SELECT descID, title, description, type, isDone FROM CONTENT WHERE name='${data.user}'`, (err, data) => {
         if (err) return;
         if (data.length === 0) return;
+        console.log('데이터 불러오기 성공');
         res.send(data);
     });
 });
 
+const createTask = (user, email) => {
+    db.query(
+        `INSERT INTO CONTENT 
+        (descID, title, description, type, isDone, name) 
+        VALUES
+         ('${user.descID}', '${user.title}', '${user.description}',
+          '${user.type}', '${Number(user.isDone)}', '${email}')`,
+        (err, data) => {
+            if (err) return console.log(err);
+            if (data.length === 0) return;
+            console.log(`CREATE : ${email}계정`);
+        }
+    );
+};
+const deleteTask = (user, email) => {
+    db.query(
+        `DELETE FROM CONTENT 
+        WHERE descID = '${user.descID}' AND name = '${email}'`,
+        (err, data) => {
+            if (err) return console.log(err);
+            if (data.length === 0) return;
+            console.log(`DELETE : ${email}계정`);
+        }
+    );
+};
+const editTask = (user, email) => {
+    db.query(
+        `UPDATE CONTENT 
+        SET title = '${user.title}', description = '${user.description}', type = '${user.type}' 
+        WHERE descID = '${user.descID}' AND name = '${email}'`,
+        (err, data) => {
+            if (err) return console.log(err);
+            if (data.length === 0) return;
+            console.log(`EDIT : ${email}계정`);
+        }
+    );
+};
+const checkTask = (user, email) => {
+    db.query(
+        `UPDATE CONTENT 
+        SET isDone = '${Number(user.isDone)}' 
+        WHERE descID = '${user.descID}' AND name = '${email}'`,
+        (err, data) => {
+            if (err) return console.log(err);
+            if (data.length === 0) return;
+            console.log(`CHECK : ${email}계정`);
+        }
+    );
+};
+
 //! 데이터 전송
 app.post('/update', ({ body }, res) => {
-    const token = body.token.token;
-    const tokenData = jwt.decode(token, process.env.SECRET_KEY, { algorithm: 'HS256' });
-    const USER = data.user;
-    if (!data) return;
+    const TOKEN = jwt.decode(body.token.token, process.env.SECRET_KEY, { algorithm: 'HS256' });
+    const USER = body.task;
+    const TYPE = body.task.POST;
+    if (!TOKEN) res.send(400);
+
+    //TODO: Object.keys의 length로 업데이트 작업을 분리함
+
+    switch (TYPE) {
+        case 'CREATE':
+            return createTask(USER, TOKEN.user);
+        case 'UPDATE':
+            return editTask(USER, TOKEN.user);
+        case 'CHECK':
+            return checkTask(USER, TOKEN.user);
+        case 'DELETE':
+            return deleteTask(USER, TOKEN.user);
+    }
 });
 
 app.listen(port, () => {
