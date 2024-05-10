@@ -4,11 +4,11 @@ import Button from "./ui/Button";
 import Input from "./ui/Input";
 
 interface EditProps {
-  editView: number;
+  editId: number;
   editorExitHandler: () => void;
 }
 
-export default function Edit({ editView, editorExitHandler }: EditProps) {
+export default function Edit({ editId, editorExitHandler }: EditProps) {
   const [id, setId] = useState(0);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -17,22 +17,17 @@ export default function Edit({ editView, editorExitHandler }: EditProps) {
   const { task, editTask } = useTask();
 
   useEffect(() => {
-    const editForm = {
-      id: task![editView - 1].descID,
-      title: task![editView - 1].title,
-      content: task![editView - 1].description,
-      type: task![editView - 1].type,
-    };
-
-    setId(editForm.id);
-    setTitle(editForm.title);
-    setContent(editForm.content);
-    setType(editForm.type);
-  }, [editView]);
+    const { descID, title, description, type } = task!.filter((item) => item.descID === editId)[0];
+    setId(descID);
+    setTitle(title);
+    setContent(description);
+    setType(type);
+  }, [editId]);
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = {
+      descID: id,
       title: title,
       description: content,
       type: type,
@@ -55,7 +50,7 @@ export default function Edit({ editView, editorExitHandler }: EditProps) {
   return (
     <div className="absolute left-[320px] top-[100px]">
       <div className={`p-4 rounded-md z-10 select-none w-[400px] h-[500px] opacity-95 sticky bg-slate-800`}>
-        <h1 className="text-3xl mb-10 text-white">Edit Task #{id}</h1>
+        <h1 className="text-3xl mb-10 text-white">Edit Task</h1>
         <form name={String(id)} onSubmit={submitHandler} className="w-full flex flex-col items-start gap-4">
           <span className="font-mono text-white">Title </span>
           <Input onChange={inputHandler} name="title" value={title} text="Title..." type="input" />

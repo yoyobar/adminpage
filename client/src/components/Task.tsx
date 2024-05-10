@@ -9,7 +9,7 @@ export default function Task() {
   const { filteredTask } = useTask();
   const [isVisible, setIsVisible] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-  const [editView, setEditView] = useState(0);
+  const [editId, setEditId] = useState(0);
 
   const editorExitHandler = () => {
     setIsEdit(false);
@@ -23,7 +23,7 @@ export default function Task() {
   const editorHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     setIsEdit(true);
     setIsVisible(false);
-    setEditView(Number(e.currentTarget.name));
+    setEditId(Number(e.currentTarget.name));
   };
 
   return (
@@ -36,7 +36,7 @@ export default function Task() {
         </button>
       </div>
 
-      {isEdit ? <Edit editorExitHandler={editorExitHandler} editView={editView} /> : null}
+      {isEdit ? <Edit editorExitHandler={editorExitHandler} editId={editId} /> : null}
       <div className="relative w-full h-full">
         {filteredTask ? filteredTask.map((item) => <TaskItem editorExitHandler={editorExitHandler} editorHandler={editorHandler} key={item.descID} {...item} />) : <Loading />}
       </div>

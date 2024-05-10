@@ -1,15 +1,18 @@
 import axios from "axios";
 import { create } from "zustand";
-import { StoreType } from "./types";
+import { TaskType, StoreType } from "./types";
 
-type ArgTaskType = {
-  descID: number;
-  title: string;
-  description: string;
-  type: string;
-  stat: number;
-  isDone: boolean;
-}[];
+type UpdateArgument = (task: TaskType[], view: string) => TaskType[];
+
+const filterUpdate: UpdateArgument = (task, view) => {
+  let updateData: TaskType[];
+  if (view === "ALL") {
+    updateData = task;
+  } else {
+    updateData = task.filter((item) => item.type === view);
+  }
+  return updateData;
+};
 
 const useTask = create<StoreType>((set) => ({
   task: null,
@@ -74,17 +77,12 @@ const useTask = create<StoreType>((set) => ({
           };
         }
       });
-      let filteredTask: ArgTaskType;
-      if (state.view === "ALL") {
-        filteredTask = editedTask;
-      } else {
-        filteredTask = editedTask.filter((item) => item.type === state.view);
-      }
+      const updateTask = filterUpdate(editedTask, state.view);
 
       return {
         ...state,
         task: editedTask,
-        filteredTask: filteredTask,
+        filteredTask: updateTask,
       };
     });
   },
@@ -103,53 +101,32 @@ const useTask = create<StoreType>((set) => ({
           };
         }
       });
-      let filteredTask: ArgTaskType;
-      if (state.view === "ALL") {
-        filteredTask = checkedTask;
-      } else {
-        filteredTask = checkedTask.filter((item) => item.type === state.view);
-      }
+      const updateTask = filterUpdate(checkedTask, state.view);
 
       return {
         ...state,
         task: checkedTask,
-        filteredTask: filteredTask,
+        filteredTask: updateTask,
       };
     });
   },
 
   deleteTask: (id: string) => {
     set((state) => {
-      const updatedTask = state
-        .task!.filter((item) => Number(item.descID) !== Number(id))
-        .map((item) => {
-          if (Number(item.descID) > Number(id)) {
-            return {
-              ...item,
-              descID: Number(item.descID) - 1,
-            };
-          } else {
-            return { ...item };
-          }
-        });
-      let filteredTask: ArgTaskType;
-      if (state.view === "ALL") {
-        filteredTask = updatedTask;
-      } else {
-        filteredTask = updatedTask.filter((item) => item.type === state.view);
-      }
+      const deletedTask = state.task!.filter((item) => Number(item.descID) !== Number(id));
+      const updateTask = filterUpdate(deletedTask, state.view);
 
       return {
         ...state,
-        task: updatedTask,
-        filteredTask: filteredTask,
+        task: deletedTask,
+        filteredTask: updateTask,
       };
     });
   },
   createTask: (form) => {
     set((state) => {
       const updatedTask = {
-        descID: state.task ? state.task.length + 1 : 1,
+        descID: form.descID,
         title: form.title,
         description: form.description,
         type: form.type,

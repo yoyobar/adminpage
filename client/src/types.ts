@@ -1,6 +1,7 @@
 //! Login.tsx 타입
 
 export interface FormData {
+  descID: number;
   title: string;
   description: string;
   type: string;

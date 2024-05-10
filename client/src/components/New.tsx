@@ -36,6 +36,7 @@ export default function New({ visibleHandler, setIsVisible }: NewType) {
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data: FormData = {
+      descID: Number(new Date().getTime()),
       title: title,
       description: content,
       isDone: isChecked,
@@ -44,6 +45,7 @@ export default function New({ visibleHandler, setIsVisible }: NewType) {
     createTask(data);
     viewTask("ALL");
     setIsVisible(false);
+    console.log(task);
   };
 
   return (
