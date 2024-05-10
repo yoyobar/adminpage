@@ -1,8 +1,13 @@
 import { useState } from "react";
 import Input from "./ui/Input";
 import Button from "./ui/Button";
-import { NewType, FormDataCheck } from "../types";
+import { FormData } from "../types";
 import useTask from "../store";
+
+export interface NewType {
+  setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  visibleHandler: () => void;
+}
 
 export default function New({ visibleHandler, setIsVisible }: NewType) {
   const [isChecked, setIsChecked] = useState(false);
@@ -30,7 +35,7 @@ export default function New({ visibleHandler, setIsVisible }: NewType) {
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const data: FormDataCheck = {
+    const data: FormData = {
       title: title,
       description: content,
       isDone: isChecked,

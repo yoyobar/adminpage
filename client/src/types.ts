@@ -1,27 +1,10 @@
 //! Login.tsx 타입
-export interface LoginType {
-  email: string;
-  name: string;
-  exp: string;
-}
-export interface AdminLoginType {
-  email: string;
-  password: string;
-  key: string;
-}
 
-export interface NewType {
-  setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  visibleHandler: () => void;
-}
-
-interface FormData {
+export interface FormData {
   title: string;
   description: string;
   type: string;
-}
-export interface FormDataCheck extends FormData {
-  isDone: boolean;
+  isDone?: boolean;
 }
 
 //! Store.tsx / TaskItem.tsx 타입
@@ -56,7 +39,7 @@ export interface StoreType {
   cleanTask: () => void;
   viewTask: (task: string) => void;
   deleteTask: (id: string) => void;
-  createTask: (form: FormDataCheck) => void;
+  createTask: (form: FormData) => void;
   checkTask: (id: string) => void;
   editTask: (id: string, form: FormData) => void;
   updateTask: (task: TaskType) => Promise<void>;

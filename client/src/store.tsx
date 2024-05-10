@@ -154,7 +154,7 @@ const useTask = create<StoreType>((set) => ({
         description: form.description,
         type: form.type,
         stat: 0,
-        isDone: form.isDone,
+        isDone: form.isDone!,
       };
       let updatedTasks;
 

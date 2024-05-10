@@ -6,7 +6,17 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { CredentialResponse } from "@react-oauth/google";
-import { AdminLoginType, LoginType } from "../types";
+
+interface LoginType {
+  email: string;
+  name: string;
+  exp: string;
+}
+interface AdminLoginType {
+  email: string;
+  password: string;
+  key: string;
+}
 
 export default function Login() {
   const nav = useNavigate();
@@ -27,13 +37,15 @@ export default function Login() {
     console.error("login Request Error");
   };
 
-  //? ADMIN LOGIN
-  const adminLoginHandle = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const dataForm: AdminLoginType = {
-      email: id,
-      password: pw,
-      key: key,
+  //? USER LOGIN
+  const googleLoginHandle = (response: CredentialResponse) => {
+    if (response.credential === undefined) return errorHandle();
+
+    const decodeToken: LoginType = jwtDecode(response.credential);
+    const dataForm = {
+      email: decodeToken.email,
+      name: decodeToken.name,
+      exp: decodeToken.exp,
     };
     axios
       .post("http://localhost:3001/login", dataForm, {
@@ -52,15 +64,13 @@ export default function Login() {
       .catch(() => errorHandle());
   };
 
-  //? USER LOGIN
-  const googleLoginHandle = (response: CredentialResponse) => {
-    if (response.credential === undefined) return errorHandle();
-
-    const decodeToken: LoginType = jwtDecode(response.credential);
-    const dataForm = {
-      email: decodeToken.email,
-      name: decodeToken.name,
-      exp: decodeToken.exp,
+  //? ADMIN LOGIN
+  const adminLoginHandle = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const dataForm: AdminLoginType = {
+      email: id,
+      password: pw,
+      key: key,
     };
     axios
       .post("http://localhost:3001/login", dataForm, {
