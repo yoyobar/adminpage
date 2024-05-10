@@ -121,18 +121,24 @@ app.post('/login', (req, res) => {
     });
 });
 
-//! 데이터 전송
+//! 데이터 요청
 app.post('/task', ({ body }, res) => {
     const token = body.token.token;
     const data = jwt.decode(token, process.env.SECRET_KEY, { algorithm: 'HS256' });
     if (!data) return;
-    setTimeout(() => {
-        db.query(`SELECT descID, title, description, type, stat FROM CONTENT WHERE name='${data.user}'`, (err, data) => {
-            if (err) return;
-            if (data.length === 0) return;
-            res.send(data);
-        });
-    }, 3000);
+    db.query(`SELECT descID, title, description, type, stat FROM CONTENT WHERE name='${data.user}'`, (err, data) => {
+        if (err) return;
+        if (data.length === 0) return;
+        res.send(data);
+    });
+});
+
+//! 데이터 전송
+app.post('/update', ({ body }, res) => {
+    const token = body.token.token;
+    const tokenData = jwt.decode(token, process.env.SECRET_KEY, { algorithm: 'HS256' });
+    const USER = data.user;
+    if (!data) return;
 });
 
 app.listen(port, () => {

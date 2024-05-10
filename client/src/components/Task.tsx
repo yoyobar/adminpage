@@ -29,7 +29,7 @@ export default function Task() {
   return (
     <div className="flex flex-col w-full">
       {isVisible ? <New setIsVisible={setIsVisible} visibleHandler={visibleHandler} /> : null}
-      <div className="font-mono flex w-full bg-slate-50 items-center gap-4 border-b p-2">
+      <div className="font-mono flex select-none w-full bg-slate-50 items-center gap-4 border-b p-2">
         <div>Task Details</div>
         <button onClick={visibleHandler} className="cursor-pointer text-white bg-green-500 pl-2 pr-2 rounded-full hover:bg-green-700 ">
           +

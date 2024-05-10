@@ -3,7 +3,12 @@ import useTask from "../store";
 import Button from "./ui/Button";
 import Input from "./ui/Input";
 
-export default function Edit({ editView, editorExitHandler }: { editView: number; editorExitHandler: () => void }) {
+interface EditProps {
+  editView: number;
+  editorExitHandler: () => void;
+}
+
+export default function Edit({ editView, editorExitHandler }: EditProps) {
   const [id, setId] = useState(0);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");

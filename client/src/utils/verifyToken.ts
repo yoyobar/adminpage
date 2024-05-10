@@ -1,7 +1,11 @@
 import axios from "axios";
-import { TokenType } from "../types";
 
-export default async function getToken() {
+interface TokenType {
+  expire: number;
+  token: object;
+}
+
+export default async function verifyToken() {
   const localToken = localStorage.getItem("token");
   if (localToken === null) return null;
 

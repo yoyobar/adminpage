@@ -1,6 +1,13 @@
-import { ButtonType } from "../../types";
+interface ButtonProps {
+  text: string;
+  color: "indigo" | "green" | "red" | "gray";
+  type: "submit" | "button";
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  className?: string;
+  name?: string;
+}
 
-export default function Button({ text, color, type, name, onClick, className }: ButtonType) {
+export default function Button({ text, color, type, name, onClick, className }: ButtonProps) {
   let buttonClass: string = "transition delay-100 text-white px-4 py-2 rounded";
   switch (color) {
     case "indigo":

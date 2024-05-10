@@ -1,6 +1,6 @@
-import { NavItemType } from "../types";
+import { NavType } from "../types";
 
-export default function NavItem({ type, count, stat, clickHandler }: NavItemType) {
+export default function NavItem({ type, count, stat, clickHandler }: NavType) {
   const className = `flex justify-between rounded-md w-full ${stat ? "bg-slate-500 text-white" : "bg-slate-200 transition hover:bg-slate-500 hover:text-white"}`;
 
   return (

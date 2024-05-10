@@ -63,7 +63,7 @@ export default function New({ visibleHandler, setIsVisible }: NewType) {
             </div>
           </label>
           <div className="flex gap-4">
-            <Button className="w-32" text="Submit" color="green" type="submit" />
+            <Button className="w-32" text="Apply" color="indigo" type="submit" />
             <Button className="w-32" onClick={visibleHandler} text="Cancel" color="red" type="button" />
           </div>
         </form>

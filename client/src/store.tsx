@@ -26,6 +26,16 @@ const useTask = create<StoreType>((set) => ({
     }
   },
 
+  updateTask: async (task) => {
+    try {
+      const token = JSON.parse(localStorage.getItem("token") as string);
+      const data = await axios.post("http://localhost:3001/update", { token: token, task: task });
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
   cleanTask: () => {
     set({ task: null, filteredTask: null });
   },

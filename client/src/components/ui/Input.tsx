@@ -1,6 +1,13 @@
-import { InputType } from "../../types";
+interface InputProps {
+  text: string;
+  type: string;
+  name?: string;
+  value?: string;
+  require?: boolean;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
+}
 
-export default function Input({ value, text, name, type, require, onChange }: InputType) {
+export default function Input({ value, text, name, type, require, onChange }: InputProps) {
   return (
     <>
       <input

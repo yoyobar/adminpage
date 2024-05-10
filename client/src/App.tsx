@@ -1,4 +1,4 @@
-import BadRequest from "./Pages/BadRequest.tsx";
+import BadRequest from "./Pages/LogoutPage.tsx";
 import LoginPage from "./Pages/LoginPage.tsx";
 import { Route, Routes } from "react-router-dom";
 import TaskPage from "./Pages/TaskPage.tsx";

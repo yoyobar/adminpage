@@ -1,22 +1,3 @@
-//! UI (Button.tsx, Input.tsx)
-export interface ButtonType {
-  text: string;
-  color: "indigo" | "green" | "red" | "gray";
-  type: "submit" | "button";
-  onClick?: React.MouseEventHandler<HTMLButtonElement>;
-  className?: string;
-  name?: string;
-}
-
-export interface InputType {
-  text: string;
-  type: string;
-  name?: string;
-  value?: string;
-  require?: boolean;
-  onChange?: React.ChangeEventHandler<HTMLInputElement>;
-}
-
 //! Login.tsx 타입
 export interface LoginType {
   email: string;
@@ -29,22 +10,10 @@ export interface AdminLoginType {
   key: string;
 }
 
-//! getToken.ts 타입
-export interface TokenType {
-  expire: number;
-  token: object;
-}
-
-export interface SearchType {
-  logout: () => void;
-}
-
 export interface NewType {
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
   visibleHandler: () => void;
 }
-
-//! New.tsx 타입
 
 interface FormData {
   title: string;
@@ -55,29 +24,33 @@ export interface FormDataCheck extends FormData {
   isDone: boolean;
 }
 
+//! Store.tsx / TaskItem.tsx 타입
+export interface TaskType {
+  title: string;
+  description: string;
+  type: string;
+  descID: number;
+  stat: number;
+  isDone: boolean;
+}
+export interface TaskItemType extends TaskType {
+  editorExitHandler: () => void;
+  editorHandler: (e: React.MouseEvent<HTMLButtonElement>) => void;
+}
+//! Store.tsx / Nav.tsx 타입
+
+export interface NavType {
+  type: string;
+  count: number;
+  stat: boolean;
+  clickHandler?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+}
+
 //! Store.tsx 타입
 export interface StoreType {
-  task:
-    | null
-    | {
-        descID: number;
-        title: string;
-        description: string;
-        type: string;
-        stat: number;
-        isDone: boolean;
-      }[];
+  task: null | TaskType[];
 
-  filteredTask:
-    | null
-    | {
-        descID: number;
-        title: string;
-        description: string;
-        type: string;
-        stat: number;
-        isDone: boolean;
-      }[];
+  filteredTask: null | TaskType[];
   view: string;
   loadTask: () => Promise<void>;
   cleanTask: () => void;
@@ -86,26 +59,5 @@ export interface StoreType {
   createTask: (form: FormDataCheck) => void;
   checkTask: (id: string) => void;
   editTask: (id: string, form: FormData) => void;
-}
-
-//! Store.tsx / TaskItem.tsx 타입
-export interface TaskItemType {
-  descID: number;
-  title: string;
-  description: string;
-  type: string;
-  stat: number;
-  isDone: boolean;
-  editorExitHandler: () => void;
-  editorHandler: (e: React.MouseEvent<HTMLButtonElement>) => void;
-}
-//! Store.tsx / Nav.tsx 타입
-export interface CountDataItemType {
-  type: string;
-  count: number;
-  stat: boolean;
-}
-
-export interface NavItemType extends CountDataItemType {
-  clickHandler?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  updateTask: (task: TaskType) => Promise<void>;
 }

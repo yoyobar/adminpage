@@ -1,18 +1,18 @@
 import NavItem from "./NavItem";
 import useTask from "../store";
 import { useEffect, useState } from "react";
-import { CountDataItemType } from "../types";
+import { NavType } from "../types";
 
 export default function Nav() {
   const { task, viewTask, view } = useTask();
-  const [countData, setCountData] = useState<CountDataItemType[]>([]);
+  const [countData, setCountData] = useState<NavType[]>([]);
   const [totalcount, setTotalCount] = useState(0);
   const [totalView, setTotalView] = useState(true);
 
   function countSort() {
     if (!task) return;
     let total = 0;
-    const countData: CountDataItemType[] = []; // 갱신된 배열 객체 형태의 데이터를 저장할 배열
+    const countData: NavType[] = [];
     task.forEach((item) => {
       const type = item.type;
       const index = countData.findIndex((data) => data.type === type);
