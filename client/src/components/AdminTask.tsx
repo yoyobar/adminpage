@@ -1,9 +1,9 @@
 import { useState } from "react";
-import New from "./New";
+import New from "./modal/NewModal";
 import TaskItem from "./TaskItem";
 import useTask from "../store";
 import Loading from "./Loading";
-import Edit from "./Edit";
+import Edit from "./modal/EditModal";
 import UserAnalyze from "./UserAnalyze";
 
 export default function AdminTask() {
@@ -33,8 +33,6 @@ export default function AdminTask() {
       }
     }
   };
-  console.log(task);
-
   const editorHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     setIsEdit(true);
     setIsVisible(false);

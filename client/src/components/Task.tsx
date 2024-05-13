@@ -1,9 +1,9 @@
 import { useState } from "react";
-import New from "./New";
+import NewModal from "./modal/NewModal";
 import TaskItem from "./TaskItem";
 import useTask from "../store";
 import Loading from "./Loading";
-import Edit from "./Edit";
+import EditModal from "./modal/EditModal";
 
 export default function Task() {
   const { filteredTask, loadTask } = useTask();
@@ -16,7 +16,7 @@ export default function Task() {
     setIsEdit(false);
   };
 
-  const visibleHandler = () => {
+  const newExitHandler = () => {
     setIsVisible(!isVisible);
     editorExitHandler();
   };
@@ -41,10 +41,10 @@ export default function Task() {
 
   return (
     <div className="flex flex-col w-full">
-      {isVisible ? <New setIsVisible={setIsVisible} visibleHandler={visibleHandler} /> : null}
+      {isVisible ? <NewModal setIsVisible={setIsVisible} newExitHandler={newExitHandler} /> : null}
       <div className="font-mono flex select-none w-full bg-slate-50 items-center gap-4 border-b border-l transition dark:border-black dark:bg-slate-700 dark:text-white  p-2">
         <div>Task Details</div>
-        <button onClick={visibleHandler} className="cursor-pointer p-1 h-full w-[35px] text-center text-white bg-indigo-400 rounded-md hover:bg-indigo-500 transition">
+        <button onClick={newExitHandler} className="cursor-pointer p-1 h-full w-[35px] text-center text-white bg-indigo-400 rounded-md hover:bg-indigo-500 transition">
           +
         </button>
         <button onClick={loadingHandler} className="p-1 h-full w-[35px] text-center bg-slate-400 rounded-md hover:bg-slate-600 transition">
@@ -58,7 +58,7 @@ export default function Task() {
         </button>
       </div>
 
-      {isEdit ? <Edit editorExitHandler={editorExitHandler} editId={editId} /> : null}
+      {isEdit ? <EditModal editorExitHandler={editorExitHandler} editId={editId} /> : null}
       <div className="relative w-full h-full">
         {filteredTask ? filteredTask.map((item) => <TaskItem editorExitHandler={editorExitHandler} editorHandler={editorHandler} key={item.descID} {...item} />) : <Loading />}
       </div>

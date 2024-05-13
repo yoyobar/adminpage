@@ -1,7 +1,7 @@
-import BadRequest from "./Pages/LogoutPage.tsx";
-import LoginPage from "./Pages/LoginPage.tsx";
+import BadRequest from "./pages/LogoutPage.tsx";
+import LoginPage from "./pages/LoginPage.tsx";
 import { Route, Routes } from "react-router-dom";
-import TaskPage from "./Pages/TaskPage.tsx";
+import TaskPage from "./pages/TaskPage.tsx";
 
 function App() {
   return (
