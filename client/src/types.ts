@@ -85,7 +85,7 @@ export interface TaskItemType extends TaskType {
  * @property {boolean} stat - 현재 선택한 카테고리 번호
  * @property {func} clickHandler - 카테고리 선택 핸들러
  */
-export interface NavType {
+export interface CategoryType {
   type: string;
   count: number;
   stat: boolean;

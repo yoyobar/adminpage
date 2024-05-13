@@ -1,18 +1,18 @@
-import NavItem from "./NavItem";
-import useTask from "../store";
+import NavItem from "./CategoryItem";
+import useTask from "../../store";
 import { useEffect, useState } from "react";
-import { NavType } from "../types";
+import { CategoryType } from "../../types";
 
-export default function Nav() {
+export default function Category() {
   const { task, viewTask, view } = useTask();
-  const [countData, setCountData] = useState<NavType[]>([]);
+  const [countData, setCountData] = useState<CategoryType[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [totalView, setTotalView] = useState(true);
 
   function countSort() {
     if (!task) return;
     let total = 0;
-    const countData: NavType[] = [];
+    const countData: CategoryType[] = [];
     task.forEach((item) => {
       const type = item.type;
       const index = countData.findIndex((data) => data.type === type);

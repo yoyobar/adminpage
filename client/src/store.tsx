@@ -43,6 +43,7 @@ const useTask = create<StoreType>((set) => ({
   //? LOGOUT
   logoutTask: () => {
     set({ task: null, filteredTask: null });
+    localStorage.removeItem("token");
   },
 
   //? CRUD

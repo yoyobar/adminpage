@@ -1,101 +1,28 @@
 import { GoogleLogin } from "@react-oauth/google";
-import { jwtDecode } from "jwt-decode";
+import { CredentialResponse } from "@react-oauth/google";
 import Button from "./ui/Button";
 import Input from "./ui/Input";
-import { useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { CredentialResponse } from "@react-oauth/google";
 
-interface LoginType {
-  email: string;
-  name: string;
-  exp: string;
-}
-interface AdminLoginType {
-  email: string;
-  password: string;
-  key: string;
+interface LoginProps {
+  Props: {
+    inputHandler: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    googleLoginHandler: (response: CredentialResponse) => void;
+    adminLoginHandler: (e: React.FormEvent<HTMLFormElement>) => void;
+    errorHandler: () => void;
+    id: string;
+    pw: string;
+    key: string;
+  };
 }
 
-export default function Login() {
-  const nav = useNavigate();
-  const [id, setId] = useState("");
-  const [pw, setPw] = useState("");
-  const [key, setKey] = useState("");
-
-  //? INPUT HANDLER
-  const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const event = e.target;
-    if (event.name === "id") setId(event.value);
-    if (event.name === "pw") setPw(event.value);
-    if (event.name === "key") setKey(event.value);
-  };
-
-  //? ERROR HANDLER
-  const errorHandle = () => {
-    console.error("login Request Error");
-  };
-
-  //? USER LOGIN
-  const googleLoginHandle = (response: CredentialResponse) => {
-    if (response.credential === undefined) return errorHandle();
-
-    const decodeToken: LoginType = jwtDecode(response.credential);
-    const dataForm = {
-      email: decodeToken.email,
-      name: decodeToken.name,
-      exp: decodeToken.exp,
-    };
-    axios
-      .post("http://localhost:3001/login", dataForm, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((response) => {
-        const myToken = {
-          token: response.data,
-          expire: Date.now() + 60 * 60 * 1000,
-        };
-        localStorage.setItem("token", JSON.stringify(myToken));
-        nav("/task", { replace: true });
-      })
-      .catch(() => errorHandle());
-  };
-
-  //? ADMIN LOGIN
-  const adminLoginHandle = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const dataForm: AdminLoginType = {
-      email: id,
-      password: pw,
-      key: key,
-    };
-    axios
-      .post("http://localhost:3001/login", dataForm, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((response) => {
-        const myToken = {
-          token: response.data,
-          expire: Date.now() + 60 * 60 * 1000,
-        };
-        localStorage.setItem("token", JSON.stringify(myToken));
-        nav("/task", { replace: true });
-      })
-      .catch(() => errorHandle());
-  };
-
+export default function Login({ Props }: LoginProps) {
   return (
-    <form onSubmit={adminLoginHandle} className="flex gap-4 flex-col w-full h-full justify-center items-center">
+    <form onSubmit={Props.adminLoginHandler} className="flex gap-4 flex-col w-full h-full justify-center items-center">
       <div className="font-mono text-4xl mb-8 text-white">ADMIN PAGE TEMPLATE</div>
-      <GoogleLogin shape="square" size="large" theme={"filled_black"} onSuccess={googleLoginHandle} onError={errorHandle} width={"400px"} />
+      <GoogleLogin shape="square" size="large" theme={"filled_black"} onSuccess={Props.googleLoginHandler} onError={Props.errorHandler} width={"400px"} />
       <div className="w-[400px] mt-8">
         <div className="pl-2 text-xl text-mono text-white">EMAIL</div>
-        <Input name={"id"} text={"Admin ID..."} type="email" onChange={inputHandler} require={true} value={id}></Input>
+        <Input name={"id"} text={"Admin ID..."} type="email" onChange={Props.inputHandler} require={true} value={Props.id}></Input>
       </div>
       <div className="w-[400px]">
         <div className="flex gap-4">
@@ -103,8 +30,8 @@ export default function Login() {
           <div className="pl-2 text-xl w-full text-mono text-white">KEY</div>
         </div>
         <div className="flex gap-4">
-          <Input name={"pw"} text={"Admin password..."} type="password" onChange={inputHandler} require={true} value={pw}></Input>
-          <Input name={"key"} text={"Admin Key..."} type="password" onChange={inputHandler} require={true} value={key}></Input>
+          <Input name={"pw"} text={"Admin password..."} type="password" onChange={Props.inputHandler} require={true} value={Props.pw}></Input>
+          <Input name={"key"} text={"Admin Key..."} type="password" onChange={Props.inputHandler} require={true} value={Props.key}></Input>
         </div>
       </div>
 

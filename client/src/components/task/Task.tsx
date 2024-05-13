@@ -2,7 +2,7 @@ import { useState } from "react";
 import NewModal from "../modal/NewModal";
 import TaskItem from "./TaskItem";
 import useTask from "../../store";
-import Loading from "../Loading";
+import Loading from "../ui/Loading";
 import EditModal from "../modal/EditModal";
 import TaskHeader from "./TaskHeader";
 

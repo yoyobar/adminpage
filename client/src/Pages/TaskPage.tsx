@@ -1,22 +1,21 @@
-import { useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
 import verifyToken from "../utils/verifyToken";
-import Loading from "../components/Loading";
+import Loading from "../components/ui/Loading";
 import Header from "../components/Header";
-import Nav from "../components/Nav";
 import Task from "../components/task/Task";
 import useTask from "../store";
-import LogoutPage from "./LogoutPage";
 import UserAnalyze from "../components/UserAnalyze";
+import Category from "../components/category/Category";
+import { useNavigate } from "react-router-dom";
 
 export default function TaskPage() {
-  const { loadTask, logoutTask } = useTask();
-  const nav = useNavigate();
+  const router = useNavigate();
+  const { logoutTask, loadTask } = useTask();
 
   const logoutHandler = () => {
-    localStorage.removeItem("token");
     logoutTask();
-    nav("/", { replace: true });
+    router("/", { replace: true });
+    window.location.reload();
   };
 
   const { isLoading, data } = useQuery(
@@ -34,13 +33,13 @@ export default function TaskPage() {
 
   switch (data) {
     case "FALSE":
-      return <LogoutPage />;
+      return logoutHandler();
     case "USER":
       return (
         <div className="w-full h-full overflow-auto">
           <Header logout={logoutHandler} ROLE="USER" />
           <div className="w-full h-full flex dark:bg-slate-700 transition">
-            <Nav />
+            <Category />
             <Task ROLE="USER" />
           </div>
         </div>
@@ -56,6 +55,6 @@ export default function TaskPage() {
         </div>
       );
     default:
-      return <LogoutPage />;
+      return logoutHandler();
   }
 }
