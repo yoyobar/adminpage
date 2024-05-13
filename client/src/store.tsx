@@ -148,6 +148,25 @@ const useTask = create<StoreType>((set) => ({
       };
     });
   },
+  deleteAdminTask: (id: string, name: string) => {
+    set((state) => {
+      const deletedTask = state.task!.filter((item) => Number(item.descID) !== Number(id));
+      const updateTask = filterUpdate(deletedTask, state.view);
+
+      const postForm: SelectableFormData = {
+        descID: Number(id),
+        POST: CRUD.ADMIN_DELETE,
+        NAME: name,
+      };
+      state.postTask(postForm);
+
+      return {
+        ...state,
+        task: deletedTask,
+        filteredTask: updateTask,
+      };
+    });
+  },
   createTask: (form) => {
     set((state) => {
       const createForm: TaskType = {

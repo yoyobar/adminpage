@@ -17,6 +17,14 @@ export default async function verifyToken() {
   }
 
   const { data } = await axios.post("http://localhost:3001/verify", myToken);
-  if (data.error) return false;
-  return true;
+  switch (data.verify) {
+    case "FALSE":
+      return "FALSE";
+    case "USER":
+      return "USER";
+    case "ADMIN":
+      return "ADMIN";
+    default:
+      return "FALSE";
+  }
 }

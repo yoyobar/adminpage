@@ -13,7 +13,6 @@ export default function Edit({ editId, editorExitHandler }: EditProps) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [type, setType] = useState("");
-
   const { task, editTask } = useTask();
 
   useEffect(() => {

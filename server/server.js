@@ -20,10 +20,11 @@ app.use(
 );
 
 //! 토큰 생성
-const createToken = (user, exp) => {
+const createToken = (user, exp, ROLE) => {
     const payload = {
         user,
         exp,
+        ROLE,
     };
 
     const token = jwt.sign(payload, process.env.SECRET_KEY, { algorithm: 'HS256' });
@@ -33,25 +34,33 @@ const createToken = (user, exp) => {
 //! 토큰 검증
 const verifyToken = ({ token }) => {
     const data = jwt.decode(token, process.env.SECRET_KEY, { algorithm: 'HS256' });
-
     if (!data) {
         console.log('No Verify!' + new Date().toLocaleTimeString());
-        return false;
-    } else {
-        console.log('Verify!' + new Date().toLocaleTimeString());
-        return token;
+        return 'FALSE';
     }
+    if (data.ROLE === 2) {
+        console.log('Verify-AdminAccount! ' + new Date().toLocaleTimeString());
+        return 'ADMIN';
+    }
+    console.log('Verify!' + new Date().toLocaleTimeString());
+    return 'USER';
 };
 
 app.post('/verify', (req, res) => {
-    if (verifyToken(req.body.token)) {
-        return res.json({
-            error: 0,
-        });
-    } else {
-        return res.json({
-            error: 1,
-        });
+    const token = verifyToken(req.body.token);
+    switch (token) {
+        case 'FALSE':
+            return res.json({
+                verify: 'FALSE',
+            });
+        case 'USER':
+            return res.json({
+                verify: 'USER',
+            });
+        case 'ADMIN':
+            return res.json({
+                verify: 'ADMIN',
+            });
     }
 });
 
@@ -62,12 +71,10 @@ app.post('/login', (req, res) => {
     const email = request?.email;
     const name = request?.name;
     const expire = request?.exp;
-
-    //? 어드민 유저 정보
-    const key = request?.key;
     if (Object.values(request).length === 0) {
         return res.status(400).send('BAD REQUEST');
     }
+    const key = request?.key;
     //? KEY값이 존재하는 어드민의 경우
     if (key) {
         const password = request?.password;
@@ -75,18 +82,18 @@ app.post('/login', (req, res) => {
             adminId: email,
             adminPw: crypto.createHash('sha256').update(password).digest('base64'),
             adminKey: key,
+            ROLE: 2,
         };
-        db.query(`SELECT adminId, adminPw, adminKey FROM admin`, (err, data) => {
+        db.query(`SELECT adminId, adminPw, adminKey, ROLE FROM admin`, (err, data) => {
             if (err) return;
             if (data.length === 0) return;
-
             if (JSON.stringify(info) !== JSON.stringify(data[0])) {
                 return null;
             }
-
             const exp = Date.now() + 60 * 1000;
+            const ROLE = data[0].ROLE;
 
-            const token = createToken(email, exp);
+            const token = createToken(email, exp, ROLE);
             res.json({
                 token,
                 token_type: 'Bearer',
@@ -95,12 +102,13 @@ app.post('/login', (req, res) => {
     }
 
     //? 아이디가 있을 경우
-    db.query(`SELECT email, username FROM people WHERE email = '${email}'`, (err, data) => {
+    db.query(`SELECT email, username, ROLE FROM people WHERE email = '${email}'`, (err, data) => {
         if (err) return;
         if (data.length === 0) return;
         console.log('DB ID UPDATE');
 
-        const token = createToken(email, expire);
+        const ROLE = data[0].ROLE;
+        const token = createToken(email, expire, ROLE);
         res.json({
             token,
             token_type: 'Bearer',
@@ -108,12 +116,13 @@ app.post('/login', (req, res) => {
     });
 
     //? 아이디가 없을 경우
-    db.query(`INSERT INTO people (email, username, exp) VALUES ('${email}', '${name}', '${expire}')`, (err, data) => {
+    db.query(`INSERT INTO people (email, username, exp, ROLE) VALUES ('${email}', '${name}', '${expire}' '${1}')`, (err, data) => {
         if (err) return;
         if (data.length === 0) return;
         console.log('DB ID CREATE');
 
-        const token = createToken(email, expire);
+        const ROLE = data[0].ROLE;
+        const token = createToken(email, expire, ROLE);
         res.json({
             token,
             token_type: 'Bearer',
@@ -127,14 +136,26 @@ app.post('/task', ({ body }, res) => {
     const data = jwt.decode(token, process.env.SECRET_KEY, { algorithm: 'HS256' });
     if (!data) return;
 
-    setTimeout(() => {
-        db.query(`SELECT descID, title, description, type, isDone FROM CONTENT WHERE name='${data.user}'`, (err, data) => {
-            if (err) return res.sendStatus(400);
-            if (data.length === 0) return res.sendStatus(204);
-            console.log('데이터 불러오기 성공');
-            res.send(data);
-        });
-    }, 1000);
+    if (data.ROLE === 1) {
+        setTimeout(() => {
+            db.query(`SELECT descID, title, description, type, isDone FROM CONTENT WHERE name='${data.user}'`, (err, data) => {
+                if (err) return res.sendStatus(400);
+                if (data.length === 0) return res.sendStatus(204);
+                console.log('데이터 불러오기 성공');
+                res.send(data);
+            });
+        }, 1000);
+    }
+    if (data.ROLE === 2) {
+        setTimeout(() => {
+            db.query(`SELECT descID, title, description, type, isDone, name FROM CONTENT`, (err, data) => {
+                if (err) return res.sendStatus(400);
+                if (data.length === 0) return res.sendStatus(204);
+                console.log('데이터 불러오기 성공');
+                res.send(data);
+            });
+        }, 1000);
+    }
 });
 
 const createTask = (user, email) => {
@@ -159,6 +180,17 @@ const deleteTask = (user, email) => {
             if (err) return console.log(err);
             if (data.length === 0) return;
             console.log(`DELETE : ${email} Account`);
+        }
+    );
+};
+const adminDeleteTask = (user) => {
+    db.query(
+        `DELETE FROM CONTENT
+        WHERE descID = '${user.descID}' AND name = '${user.NAME}'`,
+        (err, data) => {
+            if (err) return console.log(err);
+            if (data.length === 0) return;
+            console.log(`DELETE : ${user.NAME} Account by ADMIN`);
         }
     );
 };
@@ -206,6 +238,9 @@ app.post('/update', ({ body }, res) => {
             return res.sendStatus(200);
         case 'DELETE':
             deleteTask(USER, TOKEN.user);
+            return res.sendStatus(200);
+        case 'ADMIN_DELETE':
+            adminDeleteTask(USER);
             return res.sendStatus(200);
         default:
             return res.sendStatus(500);

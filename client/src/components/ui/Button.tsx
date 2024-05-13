@@ -23,10 +23,10 @@ export default function Button({ text, color, type, name, onClick, className }: 
       buttonClass += " bg-gray-400 hover:bg-gray-500";
       break;
     case "black":
-      buttonClass += " bg-black hover:bg-gray-900";
+      buttonClass += " bg-black hover:bg-gray-400";
       break;
     case "white":
-      buttonClass += " bg-white hover:bg-gray-500";
+      buttonClass += " bg-white hover:bg-white";
       break;
   }
   buttonClass += ` ${className}`;

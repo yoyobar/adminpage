@@ -10,6 +10,8 @@ export enum CRUD {
   CHECK = "CHECK",
   /** @type {3} */
   DELETE = "DELETE",
+  /** @type {4} */
+  ADMIN_DELETE = "ADMIN_DELETE",
 }
 
 /**
@@ -19,6 +21,7 @@ export enum CRUD {
  * @property {string} description - 내용
  * @property {string} type - 카테고리 분류
  * @property {boolean} isDone - 체크 여부
+ * @property {string} name - 어드민페이지 정보
  * @property {CRUD} POST - POST요청 TYPE
  */
 export interface SelectableFormData {
@@ -27,6 +30,7 @@ export interface SelectableFormData {
   description?: string;
   type?: string;
   isDone?: boolean;
+  NAME?: string;
   POST: CRUD;
 }
 
@@ -64,10 +68,12 @@ export interface TaskType {
 
 /**
  * @type CLIENT에서 전달 받는 FormData Type
+ * @property {string} name - 어드민 페이지 전달정보
  * @property {func} editorExitHandler - 수정 modal 종료 핸들
  * @property {func} editorHandler - 수정 modal 실행 핸들
  */
 export interface TaskItemType extends TaskType {
+  name?: string;
   editorExitHandler: () => void;
   editorHandler: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
@@ -108,6 +114,7 @@ export interface StoreType {
   logoutTask: () => void;
   viewTask: (task: string) => void;
   deleteTask: (id: string) => void;
+  deleteAdminTask: (id: string, name: string) => void;
   createTask: (form: FormData) => void;
   checkTask: (id: string) => void;
   editTask: (id: number, form: FormData) => void;

@@ -7,6 +7,7 @@ import Nav from "../components/Nav";
 import Task from "../components/Task";
 import useTask from "../store";
 import LogoutPage from "./LogoutPage";
+import AdminTask from "../components/AdminTask";
 
 export default function TaskPage() {
   const { loadTask, logoutTask } = useTask();
@@ -18,7 +19,7 @@ export default function TaskPage() {
     nav("/", { replace: true });
   };
 
-  const { isLoading, data, isError } = useQuery(
+  const { isLoading, data } = useQuery(
     "Verify-token",
     () => {
       loadTask();
@@ -26,21 +27,34 @@ export default function TaskPage() {
     },
     {
       refetchOnWindowFocus: false,
-      refetchOnReconnect: true,
     }
   );
 
   if (isLoading) return <Loading />;
 
-  return isError || !data ? (
-    <LogoutPage />
-  ) : (
-    <div className="w-full h-full overflow-auto">
-      <Header logout={logoutHandler} />
-      <div className="w-full h-full flex dark:bg-slate-700 transition">
-        <Nav />
-        <Task />
-      </div>
-    </div>
-  );
+  switch (data) {
+    case "FALSE":
+      return <LogoutPage />;
+    case "USER":
+      return (
+        <div className="w-full h-full overflow-auto">
+          <Header logout={logoutHandler} />
+          <div className="w-full h-full flex dark:bg-slate-700 transition">
+            <Nav />
+            <Task />
+          </div>
+        </div>
+      );
+    case "ADMIN":
+      return (
+        <div className="w-full h-full overflow-auto">
+          <Header logout={logoutHandler} admin={1} />
+          <div className="w-full h-full flex dark:bg-slate-700 transition">
+            <AdminTask />
+          </div>
+        </div>
+      );
+    default:
+      return <LogoutPage />;
+  }
 }

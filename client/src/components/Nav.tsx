@@ -6,7 +6,7 @@ import { NavType } from "../types";
 export default function Nav() {
   const { task, viewTask, view } = useTask();
   const [countData, setCountData] = useState<NavType[]>([]);
-  const [totalcount, setTotalCount] = useState(0);
+  const [totalCount, setTotalCount] = useState(0);
   const [totalView, setTotalView] = useState(true);
 
   function countSort() {
@@ -64,9 +64,9 @@ export default function Nav() {
 
   return (
     <div className="h-full select-none flex">
-      <div className="w-[300px] h-full gap-2 flex flex-col rounded-sm p-6 border-collapse border-r dark:border-black transition items-start">
+      <div className="w-[300px] h-full gap-2 flex flex-col rounded-sm p-6 transition items-start">
         <div className="w-full flex gap-4"></div>
-        <NavItem clickHandler={clickHandler} type="ALL" count={totalcount} stat={totalView} />
+        <NavItem clickHandler={clickHandler} type="ALL" count={totalCount} stat={totalView} />
         {task ? countData.map((item) => <NavItem clickHandler={clickHandler} key={item.type} {...item} />) : null}
       </div>
     </div>
