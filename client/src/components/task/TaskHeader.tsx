@@ -1,16 +1,16 @@
 interface TaskHeaderProps {
-  newExitHandler: () => void;
+  newHandler: () => void;
   loadingHandler: () => Promise<void>;
   isLoading: boolean;
   ROLE: "ADMIN" | "USER";
 }
 
-export default function TaskHeader({ newExitHandler, loadingHandler, isLoading, ROLE }: TaskHeaderProps) {
+export default function TaskHeader({ newHandler, loadingHandler, isLoading, ROLE }: TaskHeaderProps) {
   return (
     <div className="font-mono flex select-none w-full bg-slate-50 items-center gap-4 border-b border-l transition dark:border-black dark:bg-slate-700 dark:text-white  p-2">
       <div>Task Details</div>
       {ROLE === "USER" && (
-        <button onClick={newExitHandler} className="cursor-pointer p-1 h-full w-[35px] text-center text-white bg-indigo-400 rounded-md hover:bg-indigo-500 transition">
+        <button onClick={newHandler} className="cursor-pointer p-1 h-full w-[35px] text-center text-white bg-indigo-400 rounded-md hover:bg-indigo-500 transition">
           +
         </button>
       )}

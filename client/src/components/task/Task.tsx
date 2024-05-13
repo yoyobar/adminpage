@@ -12,18 +12,28 @@ interface TaskProps {
 
 export default function Task({ ROLE }: TaskProps) {
   const { task, filteredTask, loadTask } = useTask();
-  const [isVisible, setIsVisible] = useState(false);
+  const [isNew, setIsNew] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [editId, setEditId] = useState(0);
 
-  const editorExitHandler = () => {
+  //? NEW
+  const newHandler = () => {
+    setIsNew(true);
     setIsEdit(false);
   };
-
   const newExitHandler = () => {
-    setIsVisible(!isVisible);
-    editorExitHandler();
+    setIsNew(false);
+  };
+
+  //? EDITOR
+  const editorHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    setIsEdit(true);
+    setIsNew(false);
+    setEditId(Number(e.currentTarget.name));
+  };
+  const editorExitHandler = () => {
+    setIsEdit(false);
   };
 
   const loadingHandler = async () => {
@@ -38,24 +48,24 @@ export default function Task({ ROLE }: TaskProps) {
     }
   };
 
-  const editorHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    setIsEdit(true);
-    setIsVisible(false);
-    setEditId(Number(e.currentTarget.name));
-  };
-
   return (
     <div className="flex flex-col w-full">
-      {isVisible ? <NewModal setIsVisible={setIsVisible} newExitHandler={newExitHandler} /> : null}
-      <TaskHeader newExitHandler={newExitHandler} loadingHandler={loadingHandler} isLoading={isLoading} ROLE={ROLE} />
-      {isEdit ? <EditModal editorExitHandler={editorExitHandler} editId={editId} /> : null}
+      <TaskHeader newHandler={newHandler} loadingHandler={loadingHandler} isLoading={isLoading} ROLE={ROLE} />
+      {isNew && <NewModal setIsNew={setIsNew} newHandler={newHandler} newExitHandler={newExitHandler} />}
+      {isEdit && <EditModal editorExitHandler={editorExitHandler} editId={editId} />}
       {ROLE === "USER" && (
         <div>
-          {filteredTask ? filteredTask.map((item) => <TaskItem editorExitHandler={editorExitHandler} editorHandler={editorHandler} key={item.descID} {...item} />) : <Loading />}
+          {filteredTask ? (
+            filteredTask.map((item) => <TaskItem ROLE={ROLE} editorExitHandler={editorExitHandler} editorHandler={editorHandler} key={item.descID} {...item} />)
+          ) : (
+            <Loading />
+          )}
         </div>
       )}
       {ROLE === "ADMIN" && (
-        <div>{task ? task.map((item) => <TaskItem editorExitHandler={editorExitHandler} editorHandler={editorHandler} key={item.descID} {...item} />) : <Loading />}</div>
+        <div>
+          {task ? task.map((item) => <TaskItem ROLE={ROLE} editorExitHandler={editorExitHandler} editorHandler={editorHandler} key={item.descID} {...item} />) : <Loading />}
+        </div>
       )}
     </div>
   );

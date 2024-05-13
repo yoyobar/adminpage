@@ -4,11 +4,12 @@ import useTask from "../../store";
 import Modal from "./Modal";
 
 interface NewModalProps {
-  setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsNew: React.Dispatch<React.SetStateAction<boolean>>;
+  newHandler: () => void;
   newExitHandler: () => void;
 }
 
-export default function NewModal({ newExitHandler, setIsVisible }: NewModalProps) {
+export default function NewModal({ newHandler, newExitHandler, setIsNew }: NewModalProps) {
   const [isChecked, setIsChecked] = useState(false);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -43,13 +44,14 @@ export default function NewModal({ newExitHandler, setIsVisible }: NewModalProps
     };
     createTask(data);
     viewTask("ALL");
-    setIsVisible(false);
+    setIsNew(false);
   };
 
   return (
     <Modal
       Props={{
         submitHandler: submitHandler,
+        newHandler: newHandler,
         newExitHandler: newExitHandler,
         onChangeHandler: onChangeHandler,
         handleCheckboxChange: handleCheckboxChange,

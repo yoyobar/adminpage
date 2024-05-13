@@ -68,11 +68,13 @@ export interface TaskType {
 
 /**
  * @type CLIENT에서 전달 받는 FormData Type
+ * @property {'USER', 'ADMIN'} ROLE - 어드민 페이지 권한정보
  * @property {string} name - 어드민 페이지 전달정보
  * @property {func} editorExitHandler - 수정 modal 종료 핸들
  * @property {func} editorHandler - 수정 modal 실행 핸들
  */
 export interface TaskItemType extends TaskType {
+  ROLE: "USER" | "ADMIN";
   name?: string;
   editorExitHandler: () => void;
   editorHandler: (e: React.MouseEvent<HTMLButtonElement>) => void;

@@ -7,6 +7,7 @@ import useTask from "../store";
 import UserAnalyze from "../components/UserAnalyze";
 import Category from "../components/category/Category";
 import { useNavigate } from "react-router-dom";
+import WrongPage from "./WrongPage";
 
 export default function TaskPage() {
   const router = useNavigate();
@@ -33,7 +34,7 @@ export default function TaskPage() {
 
   switch (data) {
     case "FALSE":
-      return logoutHandler();
+      return <WrongPage />;
     case "USER":
       return (
         <div className="w-full h-full overflow-auto">
@@ -55,6 +56,6 @@ export default function TaskPage() {
         </div>
       );
     default:
-      return logoutHandler();
+      return <WrongPage />;
   }
 }

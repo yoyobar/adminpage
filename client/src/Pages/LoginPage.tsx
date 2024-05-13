@@ -17,11 +17,11 @@ interface AdminLoginType {
 }
 
 export default function LoginPage() {
-  const nav = useNavigate();
+  const router = useNavigate();
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      nav("/task", { replace: true });
+      router("/task", { replace: true });
     }
   }, []);
 
@@ -64,7 +64,7 @@ export default function LoginPage() {
           expire: Date.now() + 60 * 60 * 1000,
         };
         localStorage.setItem("token", JSON.stringify(myToken));
-        nav("/task", { replace: true });
+        router("/task", { replace: true });
       })
       .catch(() => errorHandler());
   };
@@ -89,7 +89,7 @@ export default function LoginPage() {
           expire: Date.now() + 60 * 60 * 1000,
         };
         localStorage.setItem("token", JSON.stringify(myToken));
-        nav("/task", { replace: true });
+        router("/task", { replace: true });
       })
       .catch(() => errorHandler());
   };

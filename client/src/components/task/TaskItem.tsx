@@ -3,7 +3,7 @@ import { TaskItemType } from "../../types";
 import useTask from "../../store";
 import { useEffect, useState } from "react";
 
-export default function TaskItem({ descID, title, description, isDone, name, editorExitHandler, editorHandler }: TaskItemType) {
+export default function TaskItem({ descID, title, description, isDone, name, ROLE, editorExitHandler, editorHandler }: TaskItemType) {
   const { task, deleteTask, deleteAdminTask, checkTask } = useTask();
   const [isChecked, setIsChecked] = useState(isDone);
 
@@ -11,6 +11,7 @@ export default function TaskItem({ descID, title, description, isDone, name, edi
     setIsChecked(isDone);
   }, [task]);
 
+  //? BTN HANDLER
   const buttonHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     editorExitHandler();
     deleteTask(e.currentTarget.name);
@@ -22,11 +23,13 @@ export default function TaskItem({ descID, title, description, isDone, name, edi
       deleteAdminTask(e.currentTarget.name, name);
     }
   };
+
+  //? CHECK HANDLER
   const checkHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     checkTask(e.currentTarget.name);
   };
   const adminCheckHandler = () => {
-    console.log("test");
+    return;
   };
 
   const ID = String(descID);
@@ -42,10 +45,18 @@ export default function TaskItem({ descID, title, description, isDone, name, edi
         <div className="flex flex-col w-full h-full pr-4 justify-center gap-2 transition">
           <label htmlFor={ID} className="flex flex-col">
             <div className="flex justify-center  gap-2">
-              <input id={ID} name={ID} onChange={name ? adminCheckHandler : checkHandler} value={Number(isChecked)} checked={isChecked} className="hidden" type="checkbox"></input>
+              <input
+                id={ID}
+                name={ID}
+                onChange={ROLE === "ADMIN" ? adminCheckHandler : checkHandler}
+                value={Number(isChecked)}
+                checked={isChecked}
+                className="hidden"
+                type="checkbox"
+              ></input>
               <div className="flex flex-col flex-grow">
                 <div className="p-2 text-xl relative">
-                  {name ? <span className="text-sm">{name} | </span> : null}
+                  {ROLE === "ADMIN" && <span className="text-sm">{name} | </span>}
                   {title}
                   {isChecked ? <span className="text-green-700 dark:text-green-500 text-right font-mono absolute right-7 top-6"> 완료</span> : ""}
                 </div>
@@ -53,12 +64,9 @@ export default function TaskItem({ descID, title, description, isDone, name, edi
                 <ul className="p-2 font-mono">{description}</ul>
               </div>
               <div className="flex justify-center items-center gap-2">
-                {name ? null : <Button name={ID} onClick={editorHandler} text="X EDIT" color="indigo" type="button" />}
-                {name ? (
-                  <Button name={ID} onClick={adminButtonHandler} text="X DEL" color="red" type="button" />
-                ) : (
-                  <Button name={ID} onClick={buttonHandler} text="X DEL" color="red" type="button" />
-                )}
+                {ROLE === "USER" && <Button name={ID} onClick={editorHandler} text="X EDIT" color="indigo" type="button" />}
+                {ROLE === "USER" && <Button name={ID} onClick={buttonHandler} text="X DEL" color="red" type="button" />}
+                {ROLE === "ADMIN" && <Button name={ID} onClick={adminButtonHandler} text="X DEL" color="red" type="button" />}
               </div>
             </div>
           </label>

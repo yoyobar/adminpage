@@ -4,6 +4,7 @@ import Input from "../ui/Input";
 
 interface NewModalProps {
   Props: {
+    newHandler: () => void;
     newExitHandler: () => void;
     submitHandler: (e: React.FormEvent<HTMLFormElement>) => void;
     onChangeHandler: (e: React.ChangeEvent<HTMLInputElement>) => void;

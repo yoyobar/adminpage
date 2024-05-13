@@ -1,7 +1,7 @@
-import BadRequest from "./pages/LogoutPage.tsx";
 import LoginPage from "./pages/LoginPage.tsx";
 import { Route, Routes } from "react-router-dom";
 import TaskPage from "./pages/TaskPage.tsx";
+import WrongPage from "./pages/WrongPage.tsx";
 
 function App() {
   return (
@@ -9,7 +9,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/task" element={<TaskPage />} />
-        <Route path="*" element={<BadRequest />} />
+        <Route path="*" element={<WrongPage />} />
       </Routes>
     </div>
   );
