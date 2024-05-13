@@ -1,6 +1,6 @@
-import Button from "./ui/Button";
-import { TaskItemType } from "../types";
-import useTask from "../store";
+import Button from "../ui/Button";
+import { TaskItemType } from "../../types";
+import useTask from "../../store";
 import { useEffect, useState } from "react";
 
 export default function TaskItem({ descID, title, description, isDone, name, editorExitHandler, editorHandler }: TaskItemType) {

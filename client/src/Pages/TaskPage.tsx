@@ -4,10 +4,10 @@ import verifyToken from "../utils/verifyToken";
 import Loading from "../components/Loading";
 import Header from "../components/Header";
 import Nav from "../components/Nav";
-import Task from "../components/Task";
+import Task from "../components/task/Task";
 import useTask from "../store";
 import LogoutPage from "./LogoutPage";
-import AdminTask from "../components/AdminTask";
+import UserAnalyze from "../components/UserAnalyze";
 
 export default function TaskPage() {
   const { loadTask, logoutTask } = useTask();
@@ -38,19 +38,20 @@ export default function TaskPage() {
     case "USER":
       return (
         <div className="w-full h-full overflow-auto">
-          <Header logout={logoutHandler} />
+          <Header logout={logoutHandler} ROLE="USER" />
           <div className="w-full h-full flex dark:bg-slate-700 transition">
             <Nav />
-            <Task />
+            <Task ROLE="USER" />
           </div>
         </div>
       );
     case "ADMIN":
       return (
         <div className="w-full h-full overflow-auto">
-          <Header logout={logoutHandler} admin={1} />
-          <div className="w-full h-full flex dark:bg-slate-700 transition">
-            <AdminTask />
+          <Header logout={logoutHandler} ROLE="ADMIN" />
+          <div className="w-full h-full flex flex-col dark:bg-slate-700 transition">
+            <UserAnalyze />
+            <Task ROLE="ADMIN" />
           </div>
         </div>
       );

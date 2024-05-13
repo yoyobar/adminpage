@@ -4,9 +4,9 @@ import { useEffect } from "react";
 
 interface HeaderProps {
   logout: () => void;
-  admin?: 1;
+  ROLE: "ADMIN" | "USER";
 }
-export default function Header({ logout, admin }: HeaderProps) {
+export default function Header({ logout, ROLE }: HeaderProps) {
   const { dark, lightMode, darkMode } = useDark();
 
   useEffect(() => {
@@ -25,7 +25,8 @@ export default function Header({ logout, admin }: HeaderProps) {
   return (
     <div className="z-10 bg-slate-50 transition dark:bg-slate-900 w-full pt-2 select-none border-b-2 dark:border-black">
       <div className="flex h-8 gap-4 justify-end items-center mb-2">
-        {admin ? null : <Button className="w-18 text-center " onClick={darkHandler} text={dark ? "✷" : "☽"} color={dark ? "gray" : "black"} type="button" />}
+        {ROLE === "ADMIN" && null}
+        {ROLE === "USER" && <Button className="w-18 text-center " onClick={darkHandler} text={dark ? "✷" : "☽"} color={dark ? "gray" : "black"} type="button" />}
         <Button className="w-18 mr-4 w-32 " onClick={logout} text="Logout" color={dark ? "gray" : "black"} type="button" />
       </div>
     </div>
