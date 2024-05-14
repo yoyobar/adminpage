@@ -1,1 +1,94 @@
 [돌아가기](../README.md)
+
+## 어드민 페이지 구현과정
+
+<img src='./img/adminPage.png'>
+
+어드민 페이지는 기본적으로는 유저와 같은 `Task`를 사용하지만, `@nivo`를 활용한 간단한 통계데이터와 <br>
+전체 사용자 정보를 조회/삭제 할 수 있는 권한을 제공하였다.
+
+```javascript
+//Task.tsx
+      {ROLE === "ADMIN" && (
+        <div>
+          {task ? task.map((item) => <TaskItem
+            ROLE={ROLE}
+            editorExitHandler={editorExitHandler}
+            editorHandler={editorHandler}
+            key={item.descID} {...item} />) : <Loading />}
+        </div>
+      )}
+    </div>
+```
+
+`TaskItem`에게 `Props`로 `ROLE`값을 전달하고, 이 `ROLE`값을 바탕으로 <br>
+렌더링여부를 결정하게하여 추가적인 데이터와 필요없는 데이터를 소거하였다.
+
+예시)
+```javascript
+                {ROLE === "USER" && <Button name={ID} onClick={editorHandler} text="X EDIT" color="indigo" type="button" />}
+                {ROLE === "USER" && <Button name={ID} onClick={buttonHandler} text="X DEL" color="red" type="button" />}
+                {ROLE === "ADMIN" && <Button name={ID} onClick={adminButtonHandler} text="X DEL" color="red" type="button" />}
+```
+전체 코드를 다루기에는 너무많아서 일부만 추려보자면, 위와같은 방식으로 버튼을 렌더링하여<br>
+필요 없는 버튼은 어드민에게 제공하지 않는 방식으로 설계하였다.
+
+
+### [프론트] - 유저 통계정보
+
+```typescript
+export default function UserAnalyze() {
+  const nowYear = new Date().getFullYear();
+  const formatForm = `${nowYear}-1-1`;
+  const formatTo = `${nowYear}-12-31`;
+  const { task } = useTask();
+  const [data, setData] = useState<data>();
+
+  const taskLoading = () => {
+    if (task) {
+      const newData = task.reduce((acc: data, curr) => {
+        const date = new Date(curr.descID);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        const format = `${year}-${month}-${day}`;
+        const existIndex = acc.findIndex((item) => item.day === format);
+
+        if (existIndex !== -1) {
+          acc[existIndex].value++;
+        } else {
+          acc.push({
+            value: 1,
+            day: format,
+          });
+        }
+        return acc;
+      }, []);
+      setData(newData);
+    }
+  };
+```
+`Nivo`라는 통계라이브러리를 사용해서 `data`의 포맷만 정해두면 자동으로 데이터가 송출되므로, <br>
+`reduce`를 활용하여 `Category.tsx`와 비슷한 구조로 설계하였다. 카테고리에서도 `map`함수가 아닌<br>
+`reduce`를 사용했으면 좀더 간단한 누적카운트 객체를 만들 수 있었을텐데, 다음에 수정할 필요성이 있겠다.<br><br>
+
+`index`값이 존재하는지 확인하고, 없으면 새로운 객체 배열을 추가하고 존재한다면 `value`의 값을 증가시키는 간단한 구조로 <br>
+누적 카운팅을 하는 함수를 구현하였다. 기존 `GlobalState`에 존재하는 `Task`를 바탕으로 데이터를 뽑아내므로, 서버와의 추가적인 통신은 따로 하지 않았다.
+
+### [백엔드] - 관리자 삭제버튼
+```javascript
+const adminDeleteTask = (user) => {
+    db.query(
+        `DELETE FROM CONTENT
+        WHERE descID = '${user.descID}' AND name = '${user.NAME}'`,
+        (err, data) => {
+            if (err) return console.log(err);
+            if (data.length === 0) return;
+            console.log(`DELETE : ${user.NAME} Account by ADMIN`);
+        }
+    );
+};
+```
+
+어드민 페이지에서만 접근가능한 유저의 사용자명을 전달받아 해당하는 값을 삭제하는 함수로 설계하였다. 유저 데이터가 아닌 유저자체를 삭제하는것도 <br>
+좋은 방법이겠지만, 이번에는 유저의 삭제보단 데이터의 `CRUD` 서버통신을 구현하는게 주목적이였으므로 따로 구현하진 않았다.
