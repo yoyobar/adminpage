@@ -13,6 +13,8 @@ export default function Category() {
     if (!task) return;
     let total = 0;
     const countData: CategoryType[] = [];
+
+    console.log(task);
     task.forEach((item) => {
       const type = item.type;
       const index = countData.findIndex((data) => data.type === type);
