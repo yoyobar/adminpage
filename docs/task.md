@@ -2,6 +2,9 @@
 
 ## 유저 페이지 구현
 
+<img src='./img/userPage.png'>
+
+
 ### [프론트] - 컴포넌트 렌더링
 가장 많은 컴포넌트를 사용하는 유저페이지다. 우선 `v0.dev`라는 `Vercel`의 AI 컴포넌트 디자인을 활용해서 디자인 템플릿을 여러개 만들고<br>
 이중에 마음에드는 디자인을 바탕으로 직접 설계해서 디자인하였다. 처음에는 댓글 기능등도 다뤄볼 생각이었지만, 배보다 배꼽이 커질 것 같아 <br>
@@ -117,32 +120,6 @@ export default function Category() {
     if (task === null) return;
     countSort();
   }, [task]);
-
-  function clickHandler(e: React.MouseEvent<HTMLButtonElement>) {
-    if (countData === null) return;
-    const clickData = countData.map((item) => {
-      if (e.currentTarget.value === item.type) {
-        setTotalView(false);
-        return {
-          ...item,
-          stat: true,
-        };
-      }
-      if (e.currentTarget.value === "ALL") {
-        setTotalView(true);
-        return {
-          ...item,
-          stat: false,
-        };
-      }
-      return {
-        ...item,
-        stat: false,
-      };
-    });
-    setCountData(clickData);
-    viewTask(e.currentTarget.value);
-  }
 ```
 
 전체 `task`의 데이터를 `forEach`로 탐색하면서 `type`이 같은 경우는 `count`를 추가하고 <br> 
@@ -152,6 +129,59 @@ export default function Category() {
 카테고리를 선택할경우 해당 카테고리가 선택된 디자인을 입히기위해 클릭핸들러를 만들었고, `stat`이라는 변수로 만들어 이를 관리했다. <br>
 그리고 `viewTask`라는 `Global State Function` 은 데이터의 타입을 기준으로 데이터를 필터링하게 함수를 만들어서 사용자가 <br>
 카테고리를 선택하면 해당 카테고리에 속해있는 아이템만 볼 수 있게 설계하였다.
+
+### [프론트] - 모달 창
+
+```typescript
+export default function Modal({ Props }: NewModalProps | EditModalProps) {
+  const { task } = useTask();
+
+  return (
+    <>
+      <div className="absolute left-[320px] top-[100px]">
+        <div className="p-4 rounded-md z-10 select-none w-[400px] h-[550px] opacity-95 sticky bg-slate-800">
+          {Props.MODAL === "NEW" && <h1 className="text-3xl mb-10 text-white">New Task #{task ? task.length + 1 : 1}</h1>}
+          {Props.MODAL === "EDIT" && <h1 className="text-3xl mb-10 text-white">Edit Task</h1>}
+          <form className="w-full flex flex-col items-start gap-4" onSubmit={Props.submitHandler}>
+            <div className="font-mono text-white">Title</div>
+            <Input name="title" value={Props.title} onChange={Props.onChangeHandler} require={true} type="input" text="New title..." />
+            <div className="font-mono text-white">Content</div>
+            <Input name="content" value={Props.content} onChange={Props.onChangeHandler} require={true} type="input" text="New subject..." />
+            <div className="font-mono text-white">Type</div>
+            <div className="w-[200px]">
+              <Input name="type" value={Props.type} onChange={Props.onChangeHandler} type="input" text="NO SORT" />
+            </div>
+            <label className="flex w-[140px] flex-col cursor-pointer select-none items-start">
+              {Props.MODAL === "NEW" && (
+                <>
+                  <div className="font-mono text-white">is Finish?</div>
+                  <div className="relative">
+                    <input type="checkbox" checked={Props.isChecked} onChange={Props.handleCheckboxChange} className="sr-only" />
+                    <div className={`box block h-8 w-14 rounded-full ${Props.isChecked ? "bg-indigo-600" : "bg-indigo-200"}`}></div>
+                    <div
+                      className={`absolute left-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-white transition ${Props.isChecked ? "translate-x-full" : ""}`}
+                    ></div>
+                  </div>
+                </>
+              )}
+            </label>
+            <div className="flex gap-4">
+              <Button className="w-32" text="Apply" color="indigo" type="submit" />
+              <Button className="w-32" onClick={Props.MODAL === "NEW" ? Props.newExitHandler : Props.editorExitHandler} text="Cancel" color="red" type="button" />
+            </div>
+          </form>
+        </div>
+      </div>
+    </>
+  );
+}
+```
+
+전체적으로 다룬다면 너무 길어서 짧게 다루겠다. 들어오는 `Props`의 데이터를 기준으로 `Type`을 나누어 보여주는 데이터를 다르게 설계하였다. <br>
+또한 `absolute`와 `sticky`를 주어 스크롤이 발생하더라도 사용자를 따라다니게 모달창을 설계하였다. 사용하는 `form`은 <br>
+체크박스를 하나 제외하면 편집모달과 생성모달이 동일하므로, 그 두개를 서로 구별하여 이벤트를 처리하게 설계했다.
+
+
 
 ### [프론트] - 전역 상태관리
 `Zustand`를 활용해서 관리했다. 모든 사용자의 `CRUD`를 관리하고 있으므로 코드가 좀 길지만 간단하게 작성하였으므로 아래에 기록하겠다.
