@@ -1,4 +1,4 @@
-<h3 align="center">Admin 페이지 구현 프로젝트</h2>
+<h3 align="center">Admin 페이지 구현 개인 프로젝트</h2>
 <p align="center">
 <img src="https://img.shields.io/badge/-typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=48a0eb">
 <img src="https://img.shields.io/badge/-React-20232a?style=for-the-badge&logo=React&logoColor=61dafb">
@@ -37,6 +37,7 @@
 
 <img style="border-radius: 15px" src='./docs/img/tree.png'>
 
+
 ### 기능별 구현 과정
 
 [서버 구현](./docs/server.md) <br>
@@ -44,3 +45,28 @@
 [검증 구현](./docs/verify.md) <br>
 [유저 페이지 구현](./docs/task.md) <br>
 [어드민 페이지 구현](./docs/admin.md) <br>
+
+### 배우게 된 점
+
+- Array method `(Filter, map, reduce)`의 종합적인 활용
+같은 구조더라도 상황에따라 `filter, map, reduce`를 다양하게 활용하여 배열메소드의 활용에대해 깊게 탐구하였다.
+<br>
+
+- `Token`과 `oAuth`의 구현
+사설회원가입과 로그인을 구현할 수 있고, 이에 따른 사용자 데이터를 관리하는 로직을 구현했다.
+<br>
+
+- 서버와 데이터베이스의 통신
+`Docker`를 통해 `mySql` 데이터베이스와 통신해보면서 간단한 `CRUD`를 통해 데이터 로직을 구현해보며 백엔드 지식을 배웠다.
+<br>
+
+- 단일책임 `(SR)`
+첫 설계당시 `SR`를 전혀 고려하지않아 문제요소가 다분한 `1회성 컴포넌트`를 리팩토링을 통해 약간은 지원하게 변경하였으며, 다음부터 가장 고려해야할 우선순위로 고려하게 되었다.
+<br>
+
+- 다양한 라이브러리
+`Zustand`를 자유롭게 사용하게 되었고, `React-query`의 기본적인 작동을 이해하고 `nivo`, `tailwindcss`, `react/oAuth`등 다양한 라이브러리를 직접 Doc를 보며 사용해보며 라이브러리의 중요성에 대해 좀더 탐구해보게 되었다.
+<br>
+
+- UI 로직
+상당히 간단한 구조를 가지고 있지만, 카테고리 분류 / 사용자 데이터 갱신 / 모달창 등 다뤄보지 않았던 다양한 UI로직을 직접 구현해보며 배울 수 있었다.
