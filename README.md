@@ -13,11 +13,13 @@
 
 ### 프로젝트 목적
 
+
+
 `OAuth`를 통해 일반적인 회원가입 / 로그인을 지원하는 간단한 태스크매니저 프로젝트입니다.
 
 데이터베이스`Mysql`을 이용해 서버단과 직접 통신하고 `CRUD`을 구현했습니다.
 
-Dark Theme, Modal등 간단한 사용자 친화적인 기능을 추가하였습니다.
+`Dark Theme`, `Modal`등 간단한 사용자 친화적인 기능을 추가하였습니다.
 
 <br>
 
@@ -31,15 +33,14 @@ Dark Theme, Modal등 간단한 사용자 친화적인 기능을 추가하였습�
 
 <br>
 
-### 디렉터리 구조
+### 디렉토리 구조
 
 <img style="border-radius: 15px" src='./docs/img/tree.png'>
 
 ### 기능별 구현 과정
 
 [서버 구현](./docs/server.md) <br>
-[회원가입 구현](./docs/register.md) <br>
-[로그인 구현](./docs/login.md) <br>
+[회원가입/로그인 구현](./docs/register.md) <br>
 [검증 구현](./docs/verify.md) <br>
-[태스크 페이지 구현](./docs/task.md) <br>
+[유저 페이지 구현](./docs/task.md) <br>
 [어드민 페이지 구현](./docs/admin.md) <br>
