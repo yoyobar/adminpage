@@ -1,4 +1,4 @@
-<h3 align="center">Admin 페이지 구현 개인 프로젝트</h2>
+<h3 align="center">Admin 페이지 구현 개인 프로젝트 04/28 ~ 05/13</h2>
 <p align="center">
 <img src="https://img.shields.io/badge/-typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=48a0eb">
 <img src="https://img.shields.io/badge/-React-20232a?style=for-the-badge&logo=React&logoColor=61dafb">
