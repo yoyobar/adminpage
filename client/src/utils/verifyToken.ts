@@ -2,19 +2,16 @@ import axios from "axios";
 
 interface TokenType {
   expire: number;
-  token: object;
+  token: {
+    token: string;
+    token_type: string;
+  };
 }
 
 export default async function verifyToken() {
   const localToken = localStorage.getItem("token");
   if (localToken === null) return null;
-
   const myToken: TokenType = JSON.parse(localToken);
-
-  if (myToken.expire <= Date.now()) {
-    localStorage.removeItem("token");
-    return null;
-  }
 
   const { data } = await axios.post("http://localhost:3001/verify", myToken);
   switch (data.verify) {
